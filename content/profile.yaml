@@ -1,0 +1,112 @@
+# =============================================================================
+#  PROFILE — your personal information, links, and site-wide settings
+# =============================================================================
+#
+#  This one file controls the text in the header, homepage hero, footer,
+#  contact section, and browser-tab title on every page.
+#
+#  HOW TO EDIT
+#   • Change only the text AFTER the colon. Keep the indentation exactly as is
+#     (YAML uses spaces — never tabs — to understand structure).
+#   • Anything in [square brackets ... placeholder] is placeholder text that
+#     still needs your real content. Run `npm run placeholders` to list them.
+#   • Lines that start with "#" are comments; the website ignores them.
+#   • If text contains a colon followed by a space (": "), wrap it in quotes.
+#
+# =============================================================================
+
+# --- Identity ----------------------------------------------------------------
+
+name: Anav Saxena
+
+# Short professional title shown under your name in browser tabs and previews.
+headline: Mechanical Engineering Student
+
+# Small label above your name on the homepage (school, program, year...).
+eyebrow: "[University · Mechanical Engineering · Class of 20XX placeholder]"
+
+# One line on what you do. Keep it under ~110 characters.
+tagline: "[Professional tagline placeholder — one sentence on the mechanical systems you design, build, and test]"
+
+# Two or three sentences max. The homepage should NOT be a biography.
+intro: "[Short introduction placeholder — two or three sentences on who you are, what you are studying, and the kind of engineering work you are looking for.]"
+
+# Optional — delete the line or leave it empty if you don't want it shown.
+location: "[City, State placeholder]"
+availability: "[Availability placeholder — e.g. Seeking Summer 20XX mechanical design internships]"
+
+# --- Photo -------------------------------------------------------------------
+# 1. Put your photo in:  content/images/
+#    (a JPG or PNG, roughly square or 4:5 portrait, at least 800 px wide)
+# 2. Remove the "#" at the start of the next two lines and fix the filename.
+#    Until then, a neutral placeholder frame is shown.
+# photo: ./images/headshot.jpg
+# photoAlt: Portrait of Anav Saxena
+
+# --- Contact & links ---------------------------------------------------------
+# These are public on the website. Use full addresses starting with https://
+email: your.email@example.com # TODO: replace with your professional email
+linkedin: https://www.linkedin.com/in/your-profile # TODO: replace with your LinkedIn URL
+github: https://github.com/TheAnoof # TODO: confirm, or delete this line to hide GitHub
+
+# --- Resume ------------------------------------------------------------------
+# Put your PDF in the folder:  public/resume/
+# `file` must match the PDF's filename exactly (capital letters matter).
+# `downloadName` is the filename recruiters get when they click Download.
+resume:
+  file: /resume/Anav-Saxena-Resume.pdf
+  downloadName: Anav-Saxena-Resume.pdf
+  updated: "[Month YYYY placeholder]"
+
+# --- Navigation --------------------------------------------------------------
+# The links in the top bar, in order. Your name (top-left) always links home.
+# `label` is the visible text; `href` is the page address — don't change those
+# unless you also rename the page.
+navigation:
+  - label: Projects
+    href: /projects/
+  - label: About
+    href: /about/
+  - label: Resume
+    href: /resume/
+
+# --- Engineering focus areas -------------------------------------------------
+# Shown on the homepage in this order, with visual weight set by `emphasis`:
+#   primary    → largest, highlighted (use for ONE area)
+#   secondary  → standard size
+#   supporting → listed compactly beneath the others
+# Each project lists the `id`s it relates to (see `areas:` in a project file),
+# and those projects automatically appear as evidence under each area.
+focusAreas:
+  - id: design
+    title: Mechanical design
+    emphasis: primary
+    label: Primary focus
+    description: "[Mechanical design focus placeholder — one sentence on the design work you do, e.g. CAD, analysis, tolerancing]"
+  - id: robotics
+    title: Robotics
+    emphasis: secondary
+    label: Growing focus
+    description: "[Robotics focus placeholder — one sentence on your robotics interests and experience]"
+  - id: manufacturing
+    title: Manufacturing
+    emphasis: secondary
+    description: "[Manufacturing focus placeholder — one sentence on the fabrication processes you have used]"
+  - id: test
+    title: Test & validation
+    emphasis: supporting
+
+# --- Projects page -----------------------------------------------------------
+# Short line under the "Projects" heading on the Projects page.
+projectsIntro: "[Projects page intro placeholder — one sentence framing the work below]"
+
+# --- Contact section (bottom of homepage) --------------------------------------
+contact:
+  heading: Get in touch
+  message: "[Contact message placeholder — e.g. I'm looking for mechanical design and robotics internships. The fastest way to reach me is email.]"
+
+# --- Search engines & link previews -----------------------------------------
+# Used for the browser-tab title and the preview card when the link is shared.
+seo:
+  title: Anav Saxena — Mechanical Engineering Portfolio
+  description: Engineering design portfolio containing ongoing projects and past experiences.
