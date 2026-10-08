@@ -1,0 +1,225 @@
+---
+/**
+ * Image frame with a fixed aspect ratio (prevents layout shift).
+ * Renders an optimized responsive image when `image` is provided; otherwise a
+ * neutral "figure placeholder" with a faint drafting grid, so pages still
+ * look intentional before real photos are added.
+ */
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  image?: ImageMetadata;
+  alt: string;
+  aspect?: string;
+  /** Optional different aspect ratio on wide screens (≥ 60rem), e.g. '2 / 1'. */
+  aspectWide?: string;
+  sizes?: string;
+  widths?: number[];
+  eager?: boolean;
+  placeholderLabel?: string;
+  marks?: boolean;
+  class?: string;
+}
+
+const {
+  image,
+  alt,
+  aspect = '16 / 10',
+  aspectWide,
+  sizes = '(min-width: 72rem) 36rem, (min-width: 45rem) 50vw, 100vw',
+  widths,
+  eager = false,
+  placeholderLabel = 'Image placeholder',
+  marks = false,
+  class: className,
+} = Astro.props;
+
+// Never request images wider than the original file.
+const candidateWidths = (widths ?? [400, 640, 960, 1280, 1600, 2000]).filter(
+  (w) => !image || w <= image.width,
+);
+if (image && !candidateWidths.includes(image.width) && image.width < 2000) {
+  candidateWidths.push(image.width);
+}
+---
+
+<div
+  class:list={['frame', { 'frame--marks': marks, 'frame--wide': aspectWide }, className]}
+  style={`--aspect: ${aspect};${aspectWide ? ` --aspect-wide: ${aspectWide};` : ''}`}
+>
+  {
+    image ? (
+      <Image
+        src={image}
+        alt={alt}
+        widths={candidateWidths}
+        sizes={sizes}
+        loading={eager ? 'eager' : 'lazy'}
+        fetchpriority={eager ? 'high' : 'auto'}
+        class="frame__img"
+      />
+    ) : (
+      <div class="frame__placeholder" role="img" aria-label={alt || placeholderLabel}>
+        <span class="frame__cross" aria-hidden="true" />
+        <span class="label frame__caption">{placeholderLabel}</span>
+      </div>
+    )
+  }
+  {
+    marks && (
+      <span class="frame__marks" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+        <span />
+      </span>
+    )
+  }
+</div>
+
+<style>
+  .frame {
+    position: relative;
+    container-type: inline-size;
+    aspect-ratio: var(--aspect);
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--paper-sunk);
+  }
+
+  @media (min-width: 60rem) {
+    .frame--wide {
+      aspect-ratio: var(--aspect-wide);
+    }
+  }
+
+  .frame__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ---- Placeholder: faint drafting grid + centre mark -------------------- */
+  .frame__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background-color: var(--paper-sunk);
+    background-image:
+      linear-gradient(to right, rgb(36 72 154 / 0.07) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(36 72 154 / 0.07) 1px, transparent 1px),
+      linear-gradient(to right, rgb(36 72 154 / 0.035) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(36 72 154 / 0.035) 1px, transparent 1px);
+    background-size:
+      80px 80px,
+      80px 80px,
+      16px 16px,
+      16px 16px;
+    background-position: center;
+    border: 1px solid var(--rule);
+    border-radius: inherit;
+  }
+
+  .frame__cross {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    translate: -50% -50%;
+    border: 1px solid var(--accent-line);
+    border-radius: 50%;
+  }
+
+  .frame__cross::before,
+  .frame__cross::after {
+    content: '';
+    position: absolute;
+    background: var(--accent-line);
+  }
+
+  .frame__cross::before {
+    left: 50%;
+    top: -12px;
+    bottom: -12px;
+    width: 1px;
+  }
+
+  .frame__cross::after {
+    top: 50%;
+    left: -12px;
+    right: -12px;
+    height: 1px;
+  }
+
+  .frame__caption {
+    position: absolute;
+    left: var(--space-3);
+    bottom: var(--space-3);
+    padding: 0.15rem 0.45rem;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.06em;
+  }
+
+  @container (max-width: 12rem) {
+    .frame__caption {
+      display: none;
+    }
+  }
+
+  /* ---- Optional corner crop marks (used on the portrait) ------------------- */
+  .frame--marks {
+    overflow: visible;
+  }
+
+  .frame--marks .frame__img,
+  .frame--marks .frame__placeholder {
+    border-radius: var(--radius);
+  }
+
+  .frame--marks .frame__img {
+    position: absolute;
+    inset: 0;
+  }
+
+  .frame__marks span {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-color: var(--rule-strong);
+    border-style: solid;
+    border-width: 0;
+  }
+
+  .frame__marks span:nth-child(1) {
+    top: -8px;
+    left: -8px;
+    border-top-width: 1px;
+    border-left-width: 1px;
+  }
+
+  .frame__marks span:nth-child(2) {
+    top: -8px;
+    right: -8px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+  }
+
+  .frame__marks span:nth-child(3) {
+    bottom: -8px;
+    left: -8px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+  }
+
+  .frame__marks span:nth-child(4) {
+    bottom: -8px;
+    right: -8px;
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+  }
+</style>

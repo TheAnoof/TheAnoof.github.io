@@ -1,0 +1,335 @@
+---
+/**
+ * Homepage — who you are, what you do, what you build, where to go next.
+ * All text comes from content/profile.yaml and the project files.
+ */
+import ButtonLink from '../components/ButtonLink.astro';
+import ContactBlock from '../components/ContactBlock.astro';
+import FocusAreas from '../components/FocusAreas.astro';
+import Icon from '../components/Icon.astro';
+import MediaFrame from '../components/MediaFrame.astro';
+import ProjectGrid from '../components/ProjectGrid.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProfile, getProjects, url } from '../lib/site';
+
+const profile = await getProfile();
+const projects = await getProjects();
+---
+
+<BaseLayout>
+  <!-- Hero ------------------------------------------------------------- -->
+  <section class="hero" aria-labelledby="hero-name">
+    <div class="container hero__grid">
+      <div class="hero__text">
+        <p class="label hero__eyebrow rise" style="--i: 0">{profile.eyebrow}</p>
+        <h1 id="hero-name" class="hero__name rise" style="--i: 1">{profile.name}</h1>
+        <p class="hero__tagline rise" style="--i: 2">{profile.tagline}</p>
+        <p class="hero__intro rise" style="--i: 3">{profile.intro}</p>
+
+        {
+          (profile.availability || profile.location) && (
+            <p class="hero__status rise" style="--i: 3">
+              {profile.availability && (
+                <span class="hero__availability">
+                  <span class="hero__dot" aria-hidden="true" />
+                  {profile.availability}
+                </span>
+              )}
+              {profile.location && (
+                <span class="hero__location">
+                  <Icon name="map-pin" size={15} />
+                  {profile.location}
+                </span>
+              )}
+            </p>
+          )
+        }
+
+        <div class="hero__actions rise" style="--i: 4">
+          <ButtonLink href={url('/projects/')} icon="arrow-right">View projects</ButtonLink>
+          <ButtonLink
+            href={url(profile.resume.file)}
+            download={profile.resume.downloadName}
+            variant="secondary"
+            icon="download"
+            iconPosition="start"
+          >
+            Download resume
+          </ButtonLink>
+        </div>
+
+        <ul class="hero__links rise" role="list" style="--i: 5">
+          {
+            profile.linkedin && (
+              <li>
+                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+                  <Icon name="linkedin" size={17} />
+                  LinkedIn
+                </a>
+              </li>
+            )
+          }
+          {
+            profile.github && (
+              <li>
+                <a href={profile.github} target="_blank" rel="noopener noreferrer">
+                  <Icon name="github" size={17} />
+                  GitHub
+                </a>
+              </li>
+            )
+          }
+          <li>
+            <a href={`mailto:${profile.email}`}>
+              <Icon name="mail" size={17} />
+              {profile.email}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="hero__portrait rise" style="--i: 2">
+        <MediaFrame
+          image={profile.photo}
+          alt={profile.photoAlt}
+          aspect="4 / 5"
+          sizes="(min-width: 52rem) 22rem, 6.5rem"
+          widths={[288, 440, 640, 880]}
+          eager
+          marks
+          placeholderLabel="Photo placeholder"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Focus areas ---------------------------------------------------------- -->
+  {
+    profile.focusAreas.length > 0 && (
+      <section class="section focus-section" aria-labelledby="focus-title">
+        <div class="container">
+          <SectionHeader index="01" label="Focus" title="What I work on" id="focus-title" />
+          <FocusAreas areas={profile.focusAreas} projects={projects} />
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Selected work ------------------------------------------------------- -->
+  <section class="section" aria-labelledby="work-title">
+    <div class="container">
+      <div class="work__header">
+        <SectionHeader index="02" label="Selected work" title="Projects" id="work-title" />
+        <div class="dimension" aria-hidden="true">
+          <span class="dimension__line"></span>
+          <span class="label dimension__text">
+            {projects.length}
+            {projects.length === 1 ? 'project' : 'projects'}
+          </span>
+          <span class="dimension__line"></span>
+        </div>
+      </div>
+      <ProjectGrid projects={projects} />
+    </div>
+  </section>
+
+  <ContactBlock index="03" />
+</BaseLayout>
+
+<style>
+  /* ---- Hero --------------------------------------------------------------- */
+  .hero {
+    padding-block: clamp(2rem, 1.2rem + 4.5vw, 5.5rem) clamp(2.5rem, 1.5rem + 3.5vw, 5rem);
+  }
+
+  .hero + .section {
+    border-top: 1px solid var(--rule);
+  }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'portrait'
+      'text';
+    gap: var(--space-5);
+  }
+
+  .hero__text {
+    grid-area: text;
+    max-width: 44rem;
+  }
+
+  .hero__portrait {
+    grid-area: portrait;
+    width: 6.5rem;
+    padding: 8px;
+  }
+
+  @media (min-width: 52rem) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr) 20rem;
+      grid-template-areas: 'text portrait';
+      gap: var(--space-8);
+      align-items: center;
+    }
+
+    .hero__portrait {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    .hero__grid {
+      grid-template-columns: minmax(0, 1fr) 22rem;
+    }
+  }
+
+  .hero__eyebrow {
+    margin-bottom: var(--space-4);
+  }
+
+  .hero__name {
+    font-size: var(--step-5);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .hero__tagline {
+    margin-top: var(--space-4);
+    max-width: 30ch;
+    font-size: var(--step-2);
+    font-weight: 500;
+    line-height: var(--leading-snug);
+    letter-spacing: -0.01em;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+
+  .hero__intro {
+    margin-top: var(--space-4);
+    max-width: 58ch;
+    color: var(--ink-2);
+  }
+
+  .hero__status {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-5);
+    font-size: var(--step--1);
+    color: var(--ink-2);
+  }
+
+  .hero__availability,
+  .hero__location {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .hero__availability {
+    align-items: baseline;
+  }
+
+  .hero__location :global(svg) {
+    flex-shrink: 0;
+  }
+
+  .hero__dot {
+    flex-shrink: 0;
+    align-self: center;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-wash);
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  .hero__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-5);
+    font-size: var(--step--1);
+  }
+
+  .hero__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 2.25rem;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  .hero__links a:hover {
+    color: var(--accent);
+  }
+
+  /* ---- Selected work header with a dimension-line count ------------------ */
+  .work__header {
+    display: grid;
+    gap: var(--space-2);
+    margin-bottom: var(--space-2);
+  }
+
+  @media (min-width: 45rem) {
+    .work__header {
+      grid-template-columns: auto 1fr;
+      align-items: end;
+      gap: var(--space-6);
+    }
+
+    .work__header :global(.section-header) {
+      margin-bottom: var(--space-6);
+    }
+  }
+
+  .dimension {
+    display: none;
+  }
+
+  @media (min-width: 45rem) {
+    .dimension {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: calc(var(--space-6) + 0.6rem);
+    }
+
+    .dimension__line {
+      position: relative;
+      flex: 1;
+      height: 1px;
+      background: var(--rule-strong);
+    }
+
+    /* End ticks, like a dimension line on a drawing. */
+    .dimension__line:first-child::before,
+    .dimension__line:last-child::after {
+      content: '';
+      position: absolute;
+      top: -5px;
+      width: 1px;
+      height: 11px;
+      background: var(--rule-strong);
+    }
+
+    .dimension__line:first-child::before {
+      left: 0;
+    }
+
+    .dimension__line:last-child::after {
+      right: 0;
+    }
+  }
+</style>

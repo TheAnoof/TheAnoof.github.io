@@ -1,0 +1,170 @@
+---
+/**
+ * Image-led project card. The whole card is clickable (the title link is
+ * stretched over it), but only the title is announced as the link.
+ */
+import { pad, projectUrl, type Project } from '../lib/site';
+import Icon from './Icon.astro';
+import MediaFrame from './MediaFrame.astro';
+import TagList from './TagList.astro';
+
+interface Props {
+  project: Project;
+  index: number;
+  headingLevel?: 'h2' | 'h3';
+  eager?: boolean;
+}
+
+const { project, index, headingLevel = 'h3', eager = false } = Astro.props;
+const { data } = project;
+const Heading = headingLevel;
+---
+
+<article class="card">
+  <MediaFrame
+    image={data.cover}
+    alt={data.coverAlt}
+    placeholderLabel={`Fig. ${pad(index)} — image placeholder`}
+    class="card__media"
+    eager={eager}
+  />
+  <div class="card__body">
+    <p class="label card__meta">
+      <span class="card__index">{pad(index)}</span>
+      <span>{data.category}</span>
+    </p>
+    <Heading class="card__title">
+      <a href={projectUrl(project)} class="card__link">{data.title}</a>
+    </Heading>
+    <p class="card__role">{data.role}</p>
+    <p class="card__subtitle">{data.subtitle}</p>
+    <div class="card__footer">
+      <TagList items={data.tags.slice(0, 3)} size="sm" label="Tags" />
+      <span class="card__cta" aria-hidden="true">
+        View project <Icon name="arrow-right" size={16} />
+      </span>
+    </div>
+  </div>
+</article>
+
+<style>
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: calc(var(--radius) + 4px);
+    padding: var(--space-2);
+    transition:
+      border-color var(--dur) var(--ease),
+      box-shadow var(--dur) var(--ease),
+      transform var(--dur) var(--ease);
+  }
+
+  .card:hover {
+    border-color: var(--accent-line);
+    box-shadow: var(--shadow);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card :global(.card__media img) {
+      transition: transform var(--dur-slow) var(--ease);
+    }
+
+    .card:hover :global(.card__media img) {
+      transform: scale(1.025);
+    }
+  }
+
+  .card:focus-within {
+    border-color: var(--accent);
+  }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-3) var(--space-3);
+  }
+
+  .card__meta {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .card__index {
+    color: var(--accent);
+  }
+
+  .card__title {
+    font-size: var(--step-2);
+    letter-spacing: -0.015em;
+  }
+
+  .card__link {
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .card__link::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+  }
+
+  .card__link:focus-visible {
+    outline: none;
+  }
+
+  .card:has(.card__link:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .card__role {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  .card__subtitle {
+    color: var(--ink-2);
+    font-size: var(--step--1);
+  }
+
+  .card__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-4);
+  }
+
+  .card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin-left: auto;
+    color: var(--accent);
+    font-size: var(--step--1);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card__cta :global(svg) {
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .card:hover .card__cta :global(svg) {
+    transform: translateX(3px);
+  }
+</style>

@@ -1,0 +1,62 @@
+---
+/** Key numbers / impact metrics as large callouts. */
+interface Props {
+  metrics: { value: string; label: string; note?: string }[];
+}
+
+const { metrics } = Astro.props;
+---
+
+{
+  metrics.length > 0 && (
+    <dl class="metrics" style={`--count: ${Math.min(metrics.length, 3)}`}>
+      {metrics.map((m) => (
+        <div class="metric">
+          <dt class="metric__label">{m.label}</dt>
+          <dd class="metric__value tabular">{m.value}</dd>
+          {m.note && <dd class="metric__note">{m.note}</dd>}
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+<style>
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+    gap: var(--space-4);
+  }
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4) var(--space-4) var(--space-5);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 2px solid var(--accent);
+    border-radius: var(--radius-sm);
+  }
+
+  /* Value first visually, label first for screen readers. */
+  .metric__value {
+    order: -1;
+    font-size: var(--step-4);
+    font-weight: 600;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+
+  .metric__label {
+    font-weight: 500;
+    line-height: var(--leading-snug);
+  }
+
+  .metric__note {
+    color: var(--ink-3);
+    font-size: var(--step--1);
+    line-height: var(--leading-snug);
+  }
+</style>

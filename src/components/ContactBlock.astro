@@ -1,0 +1,153 @@
+---
+/** Contact section: a short message and a spec-table of ways to reach out. */
+import { getProfile, url } from '../lib/site';
+import Icon, { type IconName } from './Icon.astro';
+import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+  index?: string;
+}
+
+const { index } = Astro.props;
+const profile = await getProfile();
+
+const rows: { label: string; value: string; href: string; icon: IconName; external?: boolean; download?: string }[] = [
+  { label: 'Email', value: profile.email, href: `mailto:${profile.email}`, icon: 'mail' },
+];
+if (profile.linkedin) {
+  rows.push({
+    label: 'LinkedIn',
+    value: profile.linkedin.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
+    href: profile.linkedin,
+    icon: 'linkedin',
+    external: true,
+  });
+}
+if (profile.github) {
+  rows.push({
+    label: 'GitHub',
+    value: profile.github.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
+    href: profile.github,
+    icon: 'github',
+    external: true,
+  });
+}
+rows.push({
+  label: 'Resume',
+  value: 'Download PDF',
+  href: url(profile.resume.file),
+  icon: 'download',
+  download: profile.resume.downloadName,
+});
+---
+
+<section class="section contact" aria-labelledby="contact-title">
+  <div class="container contact__grid">
+    <div>
+      <SectionHeader index={index} label="Contact" title={profile.contact.heading} id="contact-title" />
+      <p class="contact__message">{profile.contact.message}</p>
+    </div>
+    <ul class="contact__list" role="list">
+      {
+        rows.map((row) => (
+          <li>
+            <a
+              href={row.href}
+              class="contact__row"
+              target={row.external ? '_blank' : undefined}
+              rel={row.external ? 'noopener noreferrer' : undefined}
+              download={row.download}
+            >
+              <span class="label contact__label">
+                <Icon name={row.icon} size={16} />
+                {row.label}
+              </span>
+              <span class="contact__value">{row.value}</span>
+              <Icon name={row.external ? 'arrow-up-right' : 'arrow-right'} size={18} class="contact__arrow" />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .contact__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 52rem) {
+    .contact__grid {
+      grid-template-columns: 1fr 1.15fr;
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  .contact__message {
+    max-width: 44ch;
+    color: var(--ink-2);
+    font-size: var(--step-1);
+  }
+
+  .contact__list {
+    border-top: 1px solid var(--ink);
+  }
+
+  .contact__row {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr auto;
+    align-items: center;
+    gap: var(--space-4);
+    min-height: 3.5rem;
+    padding: var(--space-3) var(--space-1);
+    border-bottom: 1px solid var(--rule);
+    color: var(--ink);
+    text-decoration: none;
+    transition: background-color var(--dur) var(--ease);
+  }
+
+  .contact__row:hover {
+    background: var(--accent-wash);
+    color: var(--ink);
+  }
+
+  .contact__label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .contact__value {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-weight: 500;
+  }
+
+  .contact__row :global(.contact__arrow) {
+    color: var(--accent);
+    transition: transform var(--dur) var(--ease);
+  }
+
+  .contact__row:hover :global(.contact__arrow) {
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 30rem) {
+    .contact__row {
+      grid-template-columns: 1fr auto;
+      gap: var(--space-1) var(--space-3);
+    }
+
+    .contact__value {
+      grid-column: 1;
+    }
+
+    .contact__row :global(.contact__arrow) {
+      grid-row: 1 / span 2;
+      grid-column: 2;
+    }
+  }
+</style>

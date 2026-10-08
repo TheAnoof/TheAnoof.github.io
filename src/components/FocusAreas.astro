@@ -1,0 +1,209 @@
+---
+/**
+ * Weighted engineering focus areas. Order and emphasis come from
+ * content/profile.yaml; related projects are linked automatically from each
+ * project's `areas` list.
+ */
+import { projectUrl, type FocusArea, type Project } from '../lib/site';
+
+interface Props {
+  areas: FocusArea[];
+  projects: Project[];
+  showEvidence?: boolean;
+  /** 'columns' = weighted side-by-side columns on wide screens; 'stacked' = always one column. */
+  layout?: 'columns' | 'stacked';
+}
+
+const { areas, projects, showEvidence = true, layout = 'columns' } = Astro.props;
+
+const main = areas.filter((a) => a.emphasis !== 'supporting');
+const supporting = areas.filter((a) => a.emphasis === 'supporting');
+const evidenceFor = (id: string) => projects.filter((p) => p.data.areas.includes(id));
+---
+
+<div class:list={['focus', `focus--${layout}`]}>
+  <ol class="focus__main" role="list">
+    {
+      main.map((area, i) => {
+        const evidence = evidenceFor(area.id);
+        return (
+          <li class:list={['focus__item', `focus__item--${area.emphasis}`]}>
+            <p class="label focus__label">
+              <span class="focus__num">{String(i + 1).padStart(2, '0')}</span>
+              {area.label && <span>{area.label}</span>}
+            </p>
+            <h3 class="focus__title">{area.title}</h3>
+            {area.description && <p class="focus__desc">{area.description}</p>}
+            {showEvidence && evidence.length > 0 && (
+              <div class="focus__evidence">
+                <span class="label">See</span>
+                <ul role="list">
+                  {evidence.map((p) => (
+                    <li>
+                      <a href={projectUrl(p)}>{p.data.title}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </li>
+        );
+      })
+    }
+  </ol>
+
+  {
+    supporting.length > 0 && (
+      <div class="focus__supporting">
+        <p class="label">Also</p>
+        <ul role="list">
+          {supporting.map((area) => {
+            const evidence = evidenceFor(area.id);
+            return (
+              <li>
+                <span class="focus__support-title">{area.title}</span>
+                {showEvidence && evidence.length > 0 && (
+                  <span class="focus__support-evidence">
+                    {' — '}
+                    {evidence.map((p, j) => (
+                      <>
+                        <a href={projectUrl(p)}>{p.data.title}</a>
+                        {j < evidence.length - 1 && ', '}
+                      </>
+                    ))}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .focus__main {
+    display: grid;
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--ink);
+  }
+
+  .focus__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-5) 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .focus__label {
+    display: flex;
+    gap: var(--space-3);
+  }
+
+  .focus__num {
+    color: var(--accent);
+  }
+
+  .focus__title {
+    font-size: var(--step-2);
+  }
+
+  .focus__item--primary .focus__title {
+    font-size: var(--step-3);
+  }
+
+  .focus__item--primary .focus__label {
+    color: var(--accent);
+  }
+
+  .focus__desc {
+    color: var(--ink-2);
+    max-width: 46ch;
+  }
+
+  .focus__evidence {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-3);
+    font-size: var(--step--1);
+  }
+
+  .focus__evidence ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0;
+  }
+
+  /* Separator stays attached to the preceding link so it never starts a line. */
+  .focus__evidence li:not(:last-child)::after {
+    content: '·';
+    margin-inline: 0.5rem;
+    color: var(--ink-3);
+  }
+
+  .focus__supporting {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-2) var(--space-4);
+    padding-top: var(--space-4);
+    color: var(--ink-2);
+    font-size: var(--step--1);
+  }
+
+  .focus__supporting ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-5);
+  }
+
+  .focus__support-title {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  /* Desktop: primary area gets the widest column — width encodes priority. */
+  @media (min-width: 52rem) {
+    .focus--columns .focus__main {
+      grid-template-columns: 1.6fr 1.15fr 1fr;
+    }
+
+    .focus--columns .focus__item {
+      padding: var(--space-5) var(--space-5) var(--space-6);
+      border-bottom: 0;
+    }
+
+    .focus--columns .focus__item:first-child {
+      padding-left: 0;
+    }
+
+    .focus--columns .focus__item + .focus__item {
+      border-left: 1px solid var(--rule);
+    }
+
+    .focus--columns .focus__main {
+      border-bottom: 1px solid var(--rule);
+    }
+
+    .focus--columns .focus__item--primary {
+      box-shadow: inset 0 3px 0 var(--accent);
+    }
+  }
+
+  /* Stacked (and narrow screens): accent bar on the left of the primary area. */
+  .focus--stacked .focus__item--primary {
+    box-shadow: inset 3px 0 0 var(--accent);
+    padding-left: var(--space-4);
+  }
+
+  @media (max-width: 51.99rem) {
+    .focus__item--primary {
+      box-shadow: inset 3px 0 0 var(--accent);
+      padding-left: var(--space-4);
+    }
+  }
+</style>

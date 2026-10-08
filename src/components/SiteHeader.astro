@@ -1,0 +1,127 @@
+---
+import { getProfile, url } from '../lib/site';
+
+const profile = await getProfile();
+const current = Astro.url.pathname;
+const isCurrent = (href: string) => {
+  const target = url(href);
+  return target === '/' ? current === '/' : current.startsWith(target);
+};
+const isResume = (href: string) => href.replace(/\/$/, '').endsWith('/resume');
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href={url('/')} class="wordmark" aria-current={current === url('/') ? 'page' : undefined}>
+      {profile.name}
+    </a>
+    <nav aria-label="Main">
+      <ul role="list" class="nav">
+        {
+          profile.navigation.map((item) => (
+            <li>
+              <a
+                href={url(item.href)}
+                class:list={['nav__link', { 'nav__link--button': isResume(item.href) }]}
+                aria-current={isCurrent(item.href) ? 'page' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--paper) 94%, transparent);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  @supports (backdrop-filter: blur(1px)) {
+    .site-header {
+      backdrop-filter: saturate(1.2) blur(8px);
+    }
+  }
+
+  .site-header__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    min-height: var(--header-h);
+    padding-block: var(--space-2);
+  }
+
+  .wordmark {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    letter-spacing: -0.01em;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .wordmark:hover {
+    color: var(--ink);
+  }
+
+  .nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(0.25rem, 1.5vw, 0.75rem);
+  }
+
+  .nav__link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.5rem;
+    padding: 0 clamp(0.35rem, 1vw, 0.6rem);
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .nav__link:hover {
+    color: var(--ink);
+  }
+
+  .nav__link[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  .nav__link[aria-current='page']:not(.nav__link--button)::after {
+    content: '';
+    position: absolute;
+    left: clamp(0.35rem, 1vw, 0.6rem);
+    right: clamp(0.35rem, 1vw, 0.6rem);
+    bottom: 0.3rem;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  .nav__link--button {
+    min-height: 2.25rem;
+    margin-left: var(--space-1);
+    padding-inline: 0.8rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--ink);
+  }
+
+  .nav__link--button:hover,
+  .nav__link--button[aria-current='page'] {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+</style>

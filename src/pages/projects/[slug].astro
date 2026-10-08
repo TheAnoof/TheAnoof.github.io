@@ -1,0 +1,590 @@
+---
+/**
+ * Project page template. One page is generated automatically for every
+ * folder in content/projects/ — you never need to copy this file.
+ *
+ * Information order (high-level → deep):
+ *   header + title block → hero image → overview & key metrics →
+ *   team scope (objectives / outcomes) → my contribution & decisions →
+ *   technical details → figures
+ * Sections with no content are skipped and the numbering adjusts.
+ */
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import DecisionList from '../../components/DecisionList.astro';
+import Gallery from '../../components/Gallery.astro';
+import Icon from '../../components/Icon.astro';
+import MediaFrame from '../../components/MediaFrame.astro';
+import MetricGrid from '../../components/MetricGrid.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import TagList from '../../components/TagList.astro';
+import TitleBlock from '../../components/TitleBlock.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects, pad, projectUrl, url, type Project } from '../../lib/site';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { slug: project.id },
+    props: {
+      project,
+      prev: projects[i - 1],
+      next: projects[i + 1],
+    },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  project: Project;
+  prev?: Project;
+  next?: Project;
+}
+
+const { project, prev, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const hasBody = Boolean(project.body?.trim());
+
+// Number only the sections that actually have content.
+const sections = {
+  overview: true,
+  scope: data.objectives.length > 0 || data.outcomes.length > 0,
+  contribution: data.contributions.length > 0 || data.decisions.length > 0,
+  technical: hasBody || data.skills.length > 0 || data.tools.length > 0,
+  gallery: data.gallery.length > 0,
+};
+const numbers: Partial<Record<keyof typeof sections, string>> = {};
+let n = 0;
+for (const [key, present] of Object.entries(sections)) {
+  if (present) numbers[key as keyof typeof sections] = pad(++n);
+}
+---
+
+<BaseLayout title={data.title} description={data.summary} image={data.cover}>
+  <article>
+    <!-- Header ----------------------------------------------------------- -->
+    <header class="project-header">
+      <div class="container">
+        <nav class="breadcrumb label rise" aria-label="Breadcrumb">
+          <a href={url('/projects/')}>Projects</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{data.title}</span>
+        </nav>
+
+        <div class="project-header__text">
+          <p class="label project-header__category rise" style="--i: 1">{data.category}</p>
+          <h1 class="project-header__title rise" style="--i: 1">{data.title}</h1>
+          <p class="project-header__subtitle rise" style="--i: 2">{data.subtitle}</p>
+        </div>
+
+        <div class="rise" style="--i: 3">
+          <TitleBlock
+            rows={[
+              { label: 'My role', value: data.role },
+              { label: 'Organization', value: data.organization },
+              { label: 'Timeline', value: data.timeline },
+              { label: 'Team', value: data.team },
+              { label: 'Status', value: data.status },
+            ]}
+          />
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero visual ------------------------------------------------------- -->
+    <figure class="container hero-figure rise" style="--i: 4">
+      <MediaFrame
+        image={data.cover}
+        alt={data.coverAlt}
+        aspect="16 / 9"
+        aspectWide="2 / 1"
+        sizes="(min-width: 72rem) 72rem, 100vw"
+        eager
+        placeholderLabel="Hero image placeholder"
+      />
+      {data.coverCaption && <figcaption class="hero-figure__caption">{data.coverCaption}</figcaption>}
+    </figure>
+
+    <!-- 01 Overview + key metrics ----------------------------------------- -->
+    <section class="section overview" aria-labelledby="overview-title">
+      <div class="container">
+        <SectionHeader index={numbers.overview} label="Overview" title="At a glance" id="overview-title" />
+        <div class="overview__grid">
+          <p class="overview__summary">{data.summary}</p>
+          {
+            data.tags.length > 0 && (
+              <div class="overview__tags">
+                <TagList items={data.tags} label="Project keywords" />
+              </div>
+            )
+          }
+        </div>
+        {
+          data.metrics.length > 0 && (
+            <div class="overview__metrics">
+              <h3 class="visually-hidden">Key metrics</h3>
+              <MetricGrid metrics={data.metrics} />
+            </div>
+          )
+        }
+      </div>
+    </section>
+
+    <!-- 02 Project scope (team level) ----------------------------------------- -->
+    {
+      sections.scope && (
+        <section class="section" aria-labelledby="scope-title">
+          <div class="container">
+            <SectionHeader
+              index={numbers.scope}
+              label="Project scope"
+              note="Team"
+              title="Objectives & outcomes"
+              id="scope-title"
+            />
+            <div class="scope__grid">
+              {data.objectives.length > 0 && (
+                <div class="scope__col">
+                  <h3 class="scope__heading">Objectives</h3>
+                  <p class="scope__sub">What the project set out to do</p>
+                  <ul class="scope__list scope__list--objectives" role="list">
+                    {data.objectives.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {data.outcomes.length > 0 && (
+                <div class="scope__col">
+                  <h3 class="scope__heading">Outcomes</h3>
+                  <p class="scope__sub">What the project achieved</p>
+                  <ul class="scope__list scope__list--outcomes" role="list">
+                    {data.outcomes.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- 03 My contribution (individual) --------------------------------------- -->
+    {
+      sections.contribution && (
+        <section class="section" aria-labelledby="contribution-title">
+          <div class="container">
+            <SectionHeader
+              index={numbers.contribution}
+              label="My contribution"
+              note="Individual"
+              title="What I did"
+              id="contribution-title"
+            />
+            {data.contributions.length > 0 && (
+              <div class="contribution">
+                <p class="contribution__role">
+                  <span class="label">Role</span>
+                  <span>{data.role}</span>
+                </p>
+                <ul class="contribution__list" role="list">
+                  {data.contributions.map((item) => (
+                    <li>
+                      <Icon name="arrow-right" size={16} class="contribution__icon" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {data.decisions.length > 0 && (
+              <div class="decisions-wrap">
+                <h3 class="decisions-wrap__title">Key engineering decisions</h3>
+                <DecisionList decisions={data.decisions} />
+              </div>
+            )}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- 04 Technical details ------------------------------------------------- -->
+    {
+      sections.technical && (
+        <section class="section" aria-labelledby="technical-title">
+          <div class="container">
+            <SectionHeader
+              index={numbers.technical}
+              label="Technical details"
+              title="Engineering detail"
+              id="technical-title"
+            />
+            <div class="technical__grid">
+              {hasBody && (
+                <div class="prose">
+                  <Content />
+                </div>
+              )}
+              {(data.skills.length > 0 || data.tools.length > 0) && (
+                <aside class="technical__aside" aria-label="Skills and tools">
+                  {data.skills.length > 0 && (
+                    <div>
+                      <h3 class="label technical__aside-title">Engineering skills</h3>
+                      <TagList items={data.skills} />
+                    </div>
+                  )}
+                  {data.tools.length > 0 && (
+                    <div>
+                      <h3 class="label technical__aside-title">Tools & software</h3>
+                      <TagList items={data.tools} />
+                    </div>
+                  )}
+                </aside>
+              )}
+            </div>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- 05 Figures ------------------------------------------------------------ -->
+    {
+      sections.gallery && (
+        <section class="section" aria-labelledby="gallery-title">
+          <div class="container">
+            <SectionHeader index={numbers.gallery} label="Figures" title="Images, CAD & diagrams" id="gallery-title" />
+            <Gallery items={data.gallery} />
+          </div>
+        </section>
+      )
+    }
+
+    <!-- Previous / next ---------------------------------------------------- -->
+    <nav class="pager" aria-label="More projects">
+      <div class="container pager__grid">
+        {
+          prev ? (
+            <a href={projectUrl(prev)} class="pager__link pager__link--prev">
+              <span class="label">
+                <Icon name="arrow-left" size={14} /> Previous
+              </span>
+              <span class="pager__title">{prev.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        <a href={url('/projects/')} class="pager__all">All projects</a>
+        {
+          next ? (
+            <a href={projectUrl(next)} class="pager__link pager__link--next">
+              <span class="label">
+                Next <Icon name="arrow-right" size={14} />
+              </span>
+              <span class="pager__title">{next.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </div>
+    </nav>
+  </article>
+</BaseLayout>
+
+<style>
+  /* ---- Header --------------------------------------------------------------- */
+  .project-header {
+    padding-block: clamp(1.5rem, 1rem + 2.5vw, 3rem) var(--space-6);
+  }
+
+  .breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: clamp(1.5rem, 1rem + 2vw, 3rem);
+  }
+
+  .breadcrumb a {
+    color: var(--ink-3);
+    text-decoration: none;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--accent);
+  }
+
+  .breadcrumb [aria-current] {
+    color: var(--ink-2);
+  }
+
+  .project-header__text {
+    display: grid;
+    gap: var(--space-3);
+    max-width: 52rem;
+    margin-bottom: var(--space-6);
+  }
+
+  .project-header__category {
+    color: var(--accent);
+  }
+
+  .project-header__title {
+    font-size: var(--step-5);
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+  }
+
+  .project-header__subtitle {
+    max-width: 50ch;
+    color: var(--ink-2);
+    font-size: var(--step-2);
+    line-height: var(--leading-snug);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-figure {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .hero-figure__caption {
+    color: var(--ink-2);
+    font-size: var(--step--1);
+  }
+
+  /* ---- Overview --------------------------------------------------------------- */
+  .overview__grid {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 60rem) {
+    .overview__grid {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+      gap: var(--space-8);
+      align-items: start;
+    }
+  }
+
+  .overview__summary {
+    max-width: 60ch;
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+
+  .overview__metrics {
+    margin-top: var(--space-7);
+  }
+
+  /* ---- Scope (team) ------------------------------------------------------------- */
+  .scope__grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 45rem) {
+    .scope__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7);
+    }
+  }
+
+  .scope__col {
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--ink);
+  }
+
+  .scope__heading {
+    font-size: var(--step-1);
+  }
+
+  .scope__sub {
+    margin-top: var(--space-1);
+    color: var(--ink-3);
+    font-size: var(--step--1);
+  }
+
+  .scope__list {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .scope__list li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .scope__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.6em;
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid var(--rule-strong);
+    border-radius: 50%;
+  }
+
+  .scope__list--outcomes li::before {
+    border-color: var(--accent);
+    background: var(--accent);
+    border-radius: 2px;
+  }
+
+  /* ---- Contribution (individual) ---------------------------------------------- */
+  .contribution {
+    padding: var(--space-5) var(--space-5) var(--space-6);
+    background: var(--surface);
+    border: 1px solid var(--accent-line);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+  }
+
+  @media (min-width: 45rem) {
+    .contribution {
+      padding: var(--space-6) var(--space-7) var(--space-7);
+    }
+  }
+
+  .contribution__role {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: var(--space-3);
+    padding-bottom: var(--space-4);
+    margin-bottom: var(--space-5);
+    border-bottom: 1px solid var(--rule);
+    font-weight: 600;
+    font-size: var(--step-1);
+  }
+
+  .contribution__role .label {
+    color: var(--accent);
+  }
+
+  .contribution__list {
+    display: grid;
+    gap: var(--space-4);
+    max-width: var(--measure);
+  }
+
+  .contribution__list li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-3);
+  }
+
+  .contribution__list :global(.contribution__icon) {
+    margin-top: 0.3em;
+    color: var(--accent);
+  }
+
+  .decisions-wrap {
+    margin-top: var(--space-7);
+  }
+
+  .decisions-wrap__title {
+    margin-bottom: var(--space-4);
+  }
+
+  /* ---- Technical ------------------------------------------------------------- */
+  .technical__grid {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  @media (min-width: 60rem) {
+    .technical__grid {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      gap: var(--space-8);
+      align-items: start;
+    }
+
+    .technical__aside {
+      position: sticky;
+      top: calc(var(--header-h) + var(--space-5));
+    }
+  }
+
+  .technical__aside {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+
+  .technical__aside-title {
+    margin-bottom: var(--space-3);
+  }
+
+  /* ---- Pager -------------------------------------------------------------------- */
+  .pager {
+    padding-block: var(--space-7);
+    border-top: 1px solid var(--rule);
+  }
+
+  .pager__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .pager__all {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
+    font-size: var(--step--1);
+    font-weight: 500;
+  }
+
+  @media (min-width: 45rem) {
+    .pager__grid {
+      grid-template-columns: 1fr auto 1fr;
+    }
+
+    .pager__all {
+      grid-column: 2;
+      grid-row: 1;
+    }
+  }
+
+  .pager__link {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color var(--dur) var(--ease);
+  }
+
+  .pager__link:hover {
+    border-color: var(--accent-line);
+    color: var(--ink);
+  }
+
+  .pager__link .label {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .pager__link--next {
+    text-align: right;
+    justify-items: end;
+  }
+
+  .pager__title {
+    font-weight: 600;
+    line-height: var(--leading-snug);
+  }
+</style>

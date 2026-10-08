@@ -1,0 +1,29 @@
+---
+import ButtonLink from '../components/ButtonLink.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/site';
+---
+
+<BaseLayout title="Page not found" noindex>
+  <PageHeader eyebrow="Error 404" title="Page not found" lede="This page doesn't exist — it may have been moved or renamed.">
+    <div class="actions">
+      <ButtonLink href={url('/')} icon="arrow-right">Go to the homepage</ButtonLink>
+      <ButtonLink href={url('/projects/')} variant="secondary">Browse projects</ButtonLink>
+    </div>
+  </PageHeader>
+  <div class="spacer"></div>
+</BaseLayout>
+
+<style>
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .spacer {
+    height: var(--section);
+  }
+</style>

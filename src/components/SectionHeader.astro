@@ -1,0 +1,65 @@
+---
+/**
+ * Section heading with a numbered monospaced label, e.g.
+ *   01 ── OVERVIEW
+ *   What the project set out to do
+ */
+interface Props {
+  label: string;
+  index?: string;
+  title?: string;
+  id?: string;
+  level?: 'h2' | 'h3';
+  note?: string;
+}
+
+const { label, index, title, id, level = 'h2', note } = Astro.props;
+const Heading = level;
+---
+
+<header class="section-header">
+  <p class="label section-header__label">
+    {index && <span class="section-header__index">{index}</span>}
+    <span class="section-header__tick" aria-hidden="true"></span>
+    <span>{label}</span>
+    {note && <span class="section-header__note">{note}</span>}
+  </p>
+  {title && <Heading id={id} class="section-header__title">{title}</Heading>}
+</header>
+
+<style>
+  .section-header {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+  }
+
+  .section-header__label {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .section-header__index {
+    color: var(--accent);
+  }
+
+  .section-header__tick {
+    width: 1.5rem;
+    height: 1px;
+    background: var(--rule-strong);
+  }
+
+  .section-header__note {
+    margin-left: var(--space-1);
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    letter-spacing: 0.06em;
+  }
+
+  .section-header__title {
+    max-width: 28ch;
+  }
+</style>

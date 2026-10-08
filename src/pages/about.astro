@@ -1,0 +1,265 @@
+---
+/**
+ * About page. Text comes from content/about.md; focus areas come from
+ * content/profile.yaml so they stay consistent with the homepage.
+ */
+import { getEntry, render } from 'astro:content';
+import ButtonLink from '../components/ButtonLink.astro';
+import FocusAreas from '../components/FocusAreas.astro';
+import MediaFrame from '../components/MediaFrame.astro';
+import PageHeader from '../components/PageHeader.astro';
+import TagList from '../components/TagList.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProfile, getProjects, pad, url } from '../lib/site';
+
+const profile = await getProfile();
+const projects = await getProjects();
+const about = await getEntry('about', 'about');
+if (!about) throw new Error('content/about.md is missing.');
+const { data } = about;
+const { Content } = await render(about);
+
+// Build the list of rows that have content, then number them.
+const rows = [
+  { key: 'background', label: 'Background', show: Boolean(about.body?.trim()) },
+  { key: 'focus', label: 'Engineering focus', show: profile.focusAreas.length > 0 },
+  { key: 'interests', label: 'Interests', show: data.interests.length > 0 },
+  { key: 'highlights', label: 'Experience', show: data.highlights.length > 0 },
+  { key: 'skills', label: 'Skills', show: data.skills.length > 0 },
+  { key: 'current', label: 'Current focus', show: Boolean(data.currentFocus) },
+]
+  .filter((r) => r.show)
+  .map((r, i) => ({ ...r, index: pad(i + 1) }));
+---
+
+<BaseLayout title={data.title} description={data.lede}>
+  <PageHeader eyebrow={profile.headline} title={data.title} lede={data.lede}>
+    <div class="about__actions rise" style="--i: 3">
+      <ButtonLink href={url('/resume/')} variant="secondary" icon="arrow-right">View resume</ButtonLink>
+      <ButtonLink href={url('/projects/')} variant="quiet" icon="arrow-right">See projects</ButtonLink>
+    </div>
+    <div slot="aside" class="about__portrait rise" style="--i: 2">
+      <MediaFrame
+        image={profile.photo}
+        alt={profile.photoAlt}
+        aspect="4 / 5"
+        sizes="15rem"
+        widths={[240, 480, 720]}
+        marks
+        placeholderLabel="Photo placeholder"
+      />
+    </div>
+  </PageHeader>
+
+  <div class="container about">
+    {
+      rows.map((row) => (
+        <section class="about__row" aria-labelledby={`about-${row.key}`}>
+          <h2 id={`about-${row.key}`} class="label about__row-label">
+            <span class="about__index">{row.index}</span>
+            {row.label}
+          </h2>
+          <div class="about__row-body">
+            {row.key === 'background' && (
+              <div class="prose">
+                <Content />
+              </div>
+            )}
+
+            {row.key === 'focus' && <FocusAreas areas={profile.focusAreas} projects={projects} layout="stacked" />}
+
+            {row.key === 'interests' && (
+              <ul class="about__interests" role="list">
+                {data.interests.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+
+            {row.key === 'highlights' && (
+              <ol class="highlights" role="list">
+                {data.highlights.map((h) => (
+                  <li class="highlight">
+                    <div class="highlight__head">
+                      <h3 class="highlight__title">
+                        {h.link ? <a href={h.link}>{h.title}</a> : h.title}
+                      </h3>
+                      {h.dates && <p class="label highlight__dates">{h.dates}</p>}
+                    </div>
+                    {h.organization && <p class="highlight__org">{h.organization}</p>}
+                    {h.summary && <p class="highlight__summary">{h.summary}</p>}
+                  </li>
+                ))}
+              </ol>
+            )}
+
+            {row.key === 'skills' && (
+              <dl class="skills">
+                {data.skills.map((group) => (
+                  <div class="skills__row">
+                    <dt class="skills__group">{group.group}</dt>
+                    <dd>
+                      <TagList items={group.items} />
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+
+            {row.key === 'current' && <p class="about__current">{data.currentFocus}</p>}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</BaseLayout>
+
+<style>
+  .about__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .about__portrait {
+    width: 6.5rem;
+    padding: 8px;
+  }
+
+  @media (min-width: 52rem) {
+    .about__portrait {
+      width: 15rem;
+    }
+  }
+
+  .about {
+    padding-bottom: var(--section);
+  }
+
+  .about__row {
+    display: grid;
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+    border-top: 1px solid var(--rule);
+  }
+
+  .about__row:first-child {
+    border-top-color: var(--ink);
+  }
+
+  @media (min-width: 52rem) {
+    .about__row {
+      grid-template-columns: 13rem minmax(0, 1fr);
+      gap: var(--space-6);
+      padding-block: var(--space-7);
+    }
+  }
+
+  .about__row-label {
+    display: flex;
+    gap: var(--space-3);
+    line-height: 1.6;
+  }
+
+  .about__index {
+    color: var(--accent);
+  }
+
+  .about__row-body {
+    min-width: 0;
+  }
+
+  .about__row-body :global(.focus__main) {
+    border-top: 0;
+  }
+
+  .about__row-body :global(.focus__item:first-child) {
+    padding-top: 0;
+  }
+
+  .about__interests {
+    display: grid;
+    gap: var(--space-3);
+    max-width: var(--measure);
+  }
+
+  .about__interests li {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+
+  .about__interests li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.8em;
+    width: 0.75rem;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .highlights {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  .highlight {
+    display: grid;
+    gap: var(--space-1);
+    max-width: var(--measure);
+  }
+
+  .highlight + .highlight {
+    padding-top: var(--space-5);
+    border-top: 1px dashed var(--rule);
+  }
+
+  .highlight__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-1) var(--space-4);
+  }
+
+  .highlight__title {
+    font-size: var(--step-1);
+  }
+
+  .highlight__org {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .highlight__summary {
+    color: var(--ink-2);
+  }
+
+  .skills {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .skills__row {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  @media (min-width: 40rem) {
+    .skills__row {
+      grid-template-columns: 12rem 1fr;
+      gap: var(--space-4);
+      align-items: baseline;
+    }
+  }
+
+  .skills__group {
+    font-weight: 600;
+  }
+
+  .about__current {
+    max-width: var(--measure);
+    font-size: var(--step-1);
+  }
+</style>

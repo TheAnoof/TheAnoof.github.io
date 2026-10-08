@@ -1,0 +1,48 @@
+---
+/**
+ * Project metadata laid out like the title block of an engineering drawing:
+ * a ruled grid of small labels and values.
+ */
+interface Props {
+  rows: { label: string; value?: string }[];
+}
+
+const rows = Astro.props.rows.filter((r) => r.value);
+---
+
+<dl class="title-block">
+  {
+    rows.map((row) => (
+      <div class="title-block__cell">
+        <dt class="label">{row.label}</dt>
+        <dd>{row.value}</dd>
+      </div>
+    ))
+  }
+</dl>
+
+<style>
+  .title-block {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+    border: 1px solid var(--rule-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    overflow: hidden;
+  }
+
+  .title-block__cell {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4);
+    /* Hairlines between cells regardless of how the grid wraps. */
+    box-shadow:
+      1px 0 0 var(--rule),
+      0 1px 0 var(--rule);
+  }
+
+  .title-block dd {
+    font-weight: 500;
+    line-height: var(--leading-snug);
+  }
+</style>

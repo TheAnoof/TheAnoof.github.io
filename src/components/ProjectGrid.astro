@@ -1,0 +1,36 @@
+---
+import type { Project } from '../lib/site';
+import ProjectCard from './ProjectCard.astro';
+
+interface Props {
+  projects: Project[];
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { projects, headingLevel = 'h3' } = Astro.props;
+---
+
+<ul class="project-grid" role="list">
+  {
+    projects.map((project, i) => (
+      <li>
+        <ProjectCard project={project} index={i + 1} headingLevel={headingLevel} eager={i < 2} />
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .project-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 45rem) {
+    .project-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-6) var(--space-5);
+    }
+  }
+</style>

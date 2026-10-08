@@ -1,0 +1,122 @@
+---
+/**
+ * Resume page: download button, open-in-new-tab fallback, and an embedded
+ * preview on larger screens. The PDF itself lives in public/resume/ and is
+ * set in content/profile.yaml (resume.file).
+ */
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import ButtonLink from '../components/ButtonLink.astro';
+import Icon from '../components/Icon.astro';
+import PageHeader from '../components/PageHeader.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProfile, url } from '../lib/site';
+
+const profile = await getProfile();
+const pdfHref = url(profile.resume.file);
+const pdfPath = join(process.cwd(), 'public', profile.resume.file);
+const pdfExists = existsSync(pdfPath);
+if (!pdfExists) {
+  console.warn(`[resume] PDF not found at public${profile.resume.file} — the resume page will show a notice.`);
+}
+---
+
+<BaseLayout title="Resume" description={`Resume of ${profile.name} — ${profile.headline}.`}>
+  <PageHeader
+    eyebrow={profile.resume.updated ? `Updated ${profile.resume.updated}` : 'Resume'}
+    title="Resume"
+  >
+    <div class="resume__actions rise" style="--i: 2">
+      <ButtonLink href={pdfHref} download={profile.resume.downloadName} icon="download" iconPosition="start">
+        Download resume (PDF)
+      </ButtonLink>
+      <ButtonLink href={pdfHref} variant="secondary" icon="arrow-up-right" external>
+        Open in new tab
+      </ButtonLink>
+    </div>
+  </PageHeader>
+
+  <section class="container resume" aria-label="Resume preview">
+    {
+      pdfExists ? (
+        <div class="resume__sheet">
+            <object data={`${pdfHref}#view=FitH`} type="application/pdf" class="resume__embed" aria-label={`Resume of ${profile.name}`}>
+              <div class="resume__fallback">
+                <Icon name="file" size={28} />
+                <p>Your browser can't display the PDF here.</p>
+                <a href={pdfHref}>Open the resume PDF</a>
+              </div>
+            </object>
+        </div>
+      ) : (
+        <div class="resume__missing">
+          <Icon name="file" size={28} />
+          <p>
+            <strong>Resume PDF not added yet.</strong> Place it at <code>public{profile.resume.file}</code>.
+          </p>
+        </div>
+      )
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .resume__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .resume {
+    padding-bottom: var(--section);
+  }
+
+  .resume__sheet {
+    display: none;
+    max-width: 60rem;
+    padding: var(--space-3);
+    background: var(--paper-sunk);
+    border: 1px solid var(--rule);
+    border-radius: calc(var(--radius) + 4px);
+  }
+
+  .resume__embed {
+    display: block;
+    width: 100%;
+    height: min(80rem, 130vh);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    box-shadow: var(--shadow);
+  }
+
+  .resume__fallback,
+  .resume__missing {
+    display: grid;
+    justify-items: start;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    color: var(--ink-2);
+  }
+
+  .resume__fallback :global(svg),
+  .resume__missing :global(svg) {
+    color: var(--accent);
+  }
+
+  .resume__missing code {
+    font-family: var(--font-label);
+    font-size: 0.875em;
+  }
+
+  /* Phones and small tablets don't render embedded PDFs reliably, so the
+     preview only appears on larger screens; the buttons above work everywhere. */
+  @media (min-width: 48rem) {
+    .resume__sheet {
+      display: block;
+    }
+  }
+</style>

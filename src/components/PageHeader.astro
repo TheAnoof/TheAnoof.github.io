@@ -1,0 +1,58 @@
+---
+/** Top-of-page header used on About, Projects, and Resume. */
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+}
+
+const { eyebrow, title, lede } = Astro.props;
+---
+
+<header class="page-header">
+  <div class="container page-header__inner">
+    <div class="page-header__text">
+      <p class="label rise" style="--i: 0">{eyebrow}</p>
+      <h1 class="page-header__title rise" style="--i: 1">{title}</h1>
+      {lede && <p class="page-header__lede rise" style="--i: 2">{lede}</p>}
+      <slot />
+    </div>
+    <slot name="aside" />
+  </div>
+</header>
+
+<style>
+  .page-header {
+    padding-block: clamp(2.5rem, 1.6rem + 4vw, 5rem) var(--space-5);
+  }
+
+  .page-header__inner {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 52rem) {
+    .page-header__inner:has(> :nth-child(2)) {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+    }
+  }
+
+  .page-header__text {
+    display: grid;
+    gap: var(--space-4);
+    max-width: 48rem;
+  }
+
+  .page-header__title {
+    font-size: var(--step-5);
+    letter-spacing: -0.035em;
+    line-height: 1;
+  }
+
+  .page-header__lede {
+    max-width: 52ch;
+    color: var(--ink-2);
+    font-size: var(--step-1);
+  }
+</style>
