@@ -1,0 +1,34 @@
+{
+  "name": "anav-saxena-portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mechanical engineering portfolio for Anav Saxena, built with Astro and deployed to GitHub Pages.",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "test:links": "linkinator dist --recurse --check-fragments --check-css --skip \"^https?://(?!localhost|127\\.0\\.0\\.1|\\[::1\\])\"",
+    "test:links:external": "linkinator dist --recurse --retry --skip \"linkedin\\.com\" --skip \"example\\.com\"",
+    "verify": "astro check && astro build && npm run test:links",
+    "placeholders": "node scripts/find-placeholders.mjs"
+  },
+  "dependencies": {
+    "astro": "^7.3.7",
+    "yaml": "^2.9.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@types/node": "^24.19.1",
+    "linkinator": "^8.1.0",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "esbuild": false,
+    "fsevents": false
+  }
+}
