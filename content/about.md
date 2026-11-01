@@ -28,38 +28,27 @@ highlights:
   - title: "Wheels Responsible Engineer"
     organization: "Bruin Formula Racing"
     dates: "Sept 2025 – Present"
-    summary: "Own wheel hub and upright assembly design, integrating Vehicle Dynamics hardpoints and Brake Subsystem packaging and designing components for in-house manufacturing"
+    summary: "Own wheel hub and upright assembly design, working cross-functionally to integrate Vehicle Dynamics hardpoints, A-Arm and Steering connections, Brake Subsystem packaging, and data-acquisition sensors. Developing plan to machine uprights in-house, moving away from outsourcing to reduce cost."
   - title: "CNC Machining Mentor"
     organization: "Goldstrikers (FIRST Robotics Team 2473)"
     dates: "Summer 2026 | Student: 2021 – 2025"
-    points:
-      - "Validated Tormach 770M operation after facility relocation, integrating shop air supply and verifying ATC"
-      - "Built parametric SFM/IPT calculator for polycarbonate and aluminum, standardizing team’s feeds and speeds"
-      - "Prototyped single-setup tabbing workholding strategy for polycarbonate sheet routing to reduce production time"
-      - "Trained students on machine operation, CAM, and workholding to sustain team’s CNC manufacturing capability"
-      - "Authored SOP for machine operation, Onshape CAM procedures, and maintenance guidelines"
+    summary: "Validated Tormach 770M operation after facility relocation and created parametric SFM/IPT calculator to standardize team's feeds and speeds, ultimately authoring SOP for machine procedures, Onshape CAM procedures, and maintenance and training students on operation, CAM, and workholding methods to sustain team's in-house machining capabilities." 
   - title: "Underwater Robotics Instructor"
     organization: "University of California, Los Angeles"
     dates: "Mar 2026 – Present"
-    summary: "Instruct class of 20 undergraduates to prototype, design, fabricate, test, and iterate underwater robots, helping students develop fundamental engineering skills"
+    summary: "Instruct class of 20 undergraduate engineering students to prototype, design, manufacture, test, and iterate underwater robots within a defined set of constraints and requirements. Help students develop fundamental engineering skills in technical decision making, DFMA, and testing/iteration."
   - title: "Makerspace Technician"
     organization: "UCLA Engineering Makerspace"
     dates: "Sept 2026 – Present"
-    summary: "Support daily Makerspace operations including processing prints for 3D print farm and training students to use laser cutters, power tools, and other equipment"
+    summary: "Support daily Makerspace operations including processing prints for 3D print farm and training students to use laser cutters, power tools, and other equipment. Manage print farm as one of four technicians, conducting repairs, updating maintenance policies to include new Bambu P1S fleet, and training other staff."
   - title: "Destructive Testing Engineer"
     organization: "Bruin Racing Baja SAE"
     dates: "2025 – 2026"
-    points:
-      - "Designed load-cell rig to determine one-way bearing failure load and establish vehicle safety margins"
-      - "Iterated rig for 3-axis CNC milling and machined bearing housing on Haas CNC mill within ±0.001” tolerance"
-      - "Performed FEA and hand-calculated key stress to validate bearings as designed failure mode before testing"
+    summary: "Designed electromechanical load-cell rig to determine failure load of two one-way bearings in series and establish vehicle safety margins. Iterated designs for 3-axis CNC milling, machined components within ±0.001” tolerance, and hand-calculated keyway stresses to validate bearings as designed failure mode."
   - title: "Carbon I-Beam Engineer"
     organization: "SAMPE (UCLA Materials Research Society)"
     dates: "2025 – 2026"
-    points:
-      - "Performed composite FEA in Ansys to optimize carbon fiber I-beam geometry for 7,200-lbf load case"
-      - "Fabricated prepreg carbon-fiber layups, cured, and assembled beam for three-point bend testing"
-      - "Root-caused beam failure at 5,300-lbf to delamination near foam core and revised layup process for future beams"
+    summary: "Fabricated prepreg carbon-fiber I-beam, performing composite FEA for 7,200-lfb load case and conducting layups, curing, and assembling beam for 3-point bend test. Root-caused beam failure at 5,300-lbf to delamination near foam core."
 
 # Skills, grouped. Add or remove groups freely.
 skills:
@@ -74,6 +63,6 @@ skills:
 # currentFocus: "Currently owning mechanical design and mechanical-electrical integration of Formula SAE car wheel hubs and uprights along with working on delta-style robotic henna applicator as a personal project."
 ---
 
-I'm a second-year mechanical engineering student at UCLA. I work on owning systems end-to-end. This means defining requirements, deriving operating conditions/loads, designing and analyzing components, reviewing parts for manufacturing/assembly, and often machining and putting together systems myself.
+I am a second-year mechanical engineering student at UCLA. I work on systems end-to-end. This means defining requirements, deriving operating conditions/loads, designing and analyzing components, reviewing parts for manufacturing/assembly, and often machining and putting together systems myself.
 
-I'm currently the Wheels Responsible Engineer on Bruin Formula Racing, an instructor for UCLA's ENGR 1UW underwater robotics course, and a technician in the UCLA Engineering Makerspace. I'm looking for internships where I can go deeper into mechanical design, robotic systems, and manufacturing.
+I am currently the Wheels Responsible Engineer on Bruin Formula Racing, an instructor for UCLA's ENGR 1UW underwater robotics course, and a technician in the UCLA Engineering Makerspace. I am looking for internships where I can go deeper into mechanical design, robotic systems, and manufacturing. 
