@@ -162,3 +162,61 @@ the optional `esbuild` and `fsevents` install scripts; both work without them.
   color (≈16:1 contrast) instead of gray. Applies to the hero intro + links,
   focus areas, contact section, About lede, and every About section.
 
+
+## Stage 2 & 3 refinement (2026-10-31)
+
+Full audit and rationale: [`docs/reviews/STAGE-2-3-AUDIT.md`](reviews/STAGE-2-3-AUDIT.md).
+
+**Process**
+- Work done on `portfolio/stage-2-3-refinement` in a separate git worktree
+  (`../TheAnoof.github.io-stage-2-3`) so the main folder — which Anav edits and
+  publishes from with GitHub Desktop — stays on `main` throughout.
+
+**Confirmed with Anav**
+- Homepage order is now **Hero → Projects → Focus → Contact** so evidence appears
+  within the first scroll. Section URLs unchanged.
+- **Figure chapters** (option A): optional `section` on gallery items groups
+  figures; Anav may revisit after seeing it. Figures that repeat the hero image
+  are kept.
+- **Copy** rewritten per the audit's proposals (tagline, intro, focus
+  descriptions, About lede/bio, projects intro, contact, link-preview text);
+  Anav will tune the wording after review.
+- **About → Experience** adds Baja SAE, SAMPE, and FIRST 2473 CNC Machining
+  Mentor exactly as on the resume (new optional `points` bullet list), with all
+  entries in resume order. No SAMPE project page; henna stays hidden.
+- **Facts clarified:** go-kart fastest *best lap* of 4 teams and ~12 runs vs
+  1–3 for most teams; Baja title "Destructive Testing Engineer", left the team
+  Apr 2026, rig handed off and test still pending, FEA performed but figures
+  not retained; FSAE 23% is vs. the previous year's outsourcing cost, ~1 lb is
+  the total across four corners, 74 lb suspension mass target added (ISO 18388
+  detail deliberately omitted — design still in progress).
+- **GitHub link** moved to the footer only (profile has one repo). Location
+  stays "Cupertino/Los Angeles, CA" (more accurate than the resume).
+- **Videos:** supported via optional `video` / `videoCaption` (.mp4/.webm in the
+  project's `images/` folder); commented stubs added to go-kart and underwater
+  robot. Not autoplaying; `preload="metadata"`.
+
+**Autonomous decisions**
+- Projected/estimated FSAE figures keep their qualifiers in the metric labels
+  *and* the contribution bullets; metric values are short figures, with context
+  in the label/note.
+- **Adaptive hero:** near-square (< 1.25:1) or low-resolution (< 1400 px) covers
+  are shown whole instead of cropped to 2:1 and enlarged; wide high-res photos
+  keep the full-bleed crop.
+- **Background blending:** at build time `src/lib/imageTone.ts` samples each
+  image's border with `sharp`; plain or vertically graded backgrounds (CAD
+  screenshots, diagrams) are shown on a matching backdrop with 5% edge
+  feathering. Threshold calibrated on this site's images (plain 1–25, photos
+  43+). `sharp` was already installed via Astro; it is now listed explicitly.
+- **Gallery:** fixed responsive-width bug (sources between steps were capped at
+  800 px; < 480 px had no `srcset`); figures wider than 1.8:1 span full width at
+  natural aspect; others share a 4:3 frame (never cropped); full-size links open
+  in a new tab; when alt text equals the caption the image alt is empty so
+  screen readers don't read it twice.
+- Italic IBM Plex Sans removed (unused, was a 75 KB preload on every page).
+  JPEG photos encoded at quality 72.
+- Project cards show the timeline; "At a glance" drops the duplicate tag column.
+- Entrance animation starts at 40% opacity (content never fully hidden).
+- Footer, breadcrumb and focus-area links have ≥ 24 px tap targets.
+- Consistency: en-dash date ranges, "Present", "6-DoF", "Fusion 360", "80/20",
+  units ("1 lb", "±0.001 in", "0.392 g"), "dynamometer".

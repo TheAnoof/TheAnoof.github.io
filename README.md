@@ -17,7 +17,7 @@ you edit lives in two folders: `content/` and `public/resume/`.**
 content/                         ← ✏️  EDIT THESE FILES
 ├── profile.yaml                    name, tagline, email, links, navigation, focus areas
 ├── about.md                        About page (bio, interests, experience, skills)
-├── images/                         your headshot goes here
+├── images/                         your portrait photo (WebsitePhoto.JPG)
 └── projects/
     ├── _TEMPLATE/                  copy this folder to add a new project
     ├── fsae-wheels/
@@ -68,9 +68,10 @@ field, so nothing broken can go live.
 ### Your photo → `content/images/`
 
 1. Save a portrait photo (JPG or PNG, roughly 4:5 or square, at least 800 px wide)
-   as `content/images/headshot.jpg`.
-2. In `content/profile.yaml`, remove the `#` in front of the `photo:` and
-   `photoAlt:` lines.
+   in `content/images/` (currently `WebsitePhoto.JPG`).
+2. In `content/profile.yaml`, point `photo:` at the file. `photoAlt:` is
+   optional; if it's left out, the alt text is "Portrait of <your name>".
+
 
 Images are automatically resized and compressed — don't worry about file size,
 but please keep originals under ~10 MB.
@@ -81,6 +82,9 @@ The top section (between the `---` lines) holds lists: interests, experience
 highlights, skills, current focus. Below it, write your bio as ordinary text —
 leave a blank line between paragraphs. Delete any list you don't want and its
 section disappears from the page.
+
+Each experience entry can have a one-sentence `summary`, a `points:` bullet
+list (e.g. copied from your resume), or both.
 
 ### Project pages → `content/projects/<project>/index.md`
 
@@ -98,7 +102,8 @@ structured parts of the page:
 | `contributions` | "My contribution — Individual" section (what **you** did) |
 | `decisions` | "Key engineering decisions" — decision, rationale, result |
 | `skills`, `tools` | "Skills & tools" panel |
-| `gallery` | Numbered figures (Fig. 01, 02…) at the bottom |
+| `gallery` | Numbered figures (Fig. 01, 02…), grouped into chapters by `section` |
+| `video`, `videoCaption` | Optional test/demo clip shown above the figures |
 | `order` | Position on the Projects page (1 = first) |
 | `draft: true` | Hides the project everywhere — live site and local preview |
 | `areas` | Which focus areas on the homepage list this project as evidence |
@@ -122,23 +127,57 @@ interview.
 
    gallery:
      - src: ./images/cad-assembly.png
+       section: Design
        alt: Exploded CAD view of the wheel assembly
        caption: Exploded CAD view of the hub, rim, and center-lock nut
    ```
 
 `alt` text describes the image for people using screen readers; keep it short
-and specific. Use lowercase file names without spaces (`fea-results.png`, not
-`FEA Results.PNG`).
+and specific. **Captions should explain what the viewer is looking at** (what
+was analyzed, what the result shows), not just name the part. Use lowercase
+file names without spaces (`fea-results.png`, not `FEA Results.PNG`).
 
-Every image gets a thin dark-blue border. To change its color or thickness,
-edit `--image-border-color` and `--image-border-width` near the top of
-`src/styles/tokens.css`.
+How figures are laid out — all automatic:
+
+- **`section`** (optional) groups figures into chapters, in the order they
+  first appear: e.g. `Design`, `Analysis`, `Manufacturing`, `Testing`. A
+  chapter with a single figure shows it beside its caption.
+- **Wide images** (diagrams, spreadsheets, tables — wider than about 1.8:1)
+  span the full width so their text stays readable.
+- **CAD screenshots and diagrams with a plain background** are shown whole on
+  a backdrop of the same color, so they blend into the page. Photos keep a
+  normal frame. The large top image (`cover`) is only cropped when it's a
+  wide, high-resolution photo.
+- Every image gets a thin dark-blue border. To change its color or thickness,
+  edit `--image-border-color` and `--image-border-width` near the top of
+  `src/styles/tokens.css`.
+
+### Project videos
+
+1. The site needs an **.mp4** file. To convert an iPhone `.MOV`, use the
+   converter built into macOS (it also strips location metadata):
+
+   ```bash
+   avconvert --source ~/Desktop/clip.MOV --preset Preset1280x720 --output ~/Desktop/clip.mp4
+   ```
+
+   Keep clips short (a 10–20 s, 720p clip is typically a few MB; stay under
+   ~20 MB). Or put the `.MOV` in the folder and ask Claude to convert it.
+2. Put the `.mp4` in the project's `images/` folder.
+3. In the project's `index.md`, remove the `#` from the `video:` and
+   `videoCaption:` lines and fix the filename. (The go-kart and underwater
+   robot files already have these lines waiting.)
+
+The video appears at the top of the Figures section with play controls; it
+never autoplays. If the filename is wrong, the build stops and tells you.
 
 ### Resume → `public/resume/`
 
-Replace `public/resume/Anav-Saxena-Resume.pdf` with your real resume, **using
-the same file name**. (Or use a different name and update `resume.file` in
-`content/profile.yaml`.) Also update `resume.updated` with the month.
+Replace `public/resume/Anav_Saxena_UCLAMechanical.pdf` with your updated
+resume, **using the same file name**. (Or use a different name and update
+`resume.file` in `content/profile.yaml`.) Also update `resume.updated` with the
+month. Visitors always get the newest version — the link includes a fingerprint
+of the file, so browsers can't show a stale cached copy.
 
 ### Adding a new project
 
@@ -196,7 +235,14 @@ ends without an error, the site is safe to publish.
 ## Publishing changes
 
 The live site updates automatically whenever changes reach the `main` branch on
-GitHub. With GitHub Desktop or the terminal:
+GitHub. **Saving a file does not publish it** — it only updates your local
+preview.
+
+**With GitHub Desktop (recommended):** make sure *Current Branch* says `main`,
+type a short summary of what you changed (e.g. "Update wheels project"), click
+**Commit to main**, then **Push origin**.
+
+**Or with the terminal:**
 
 ```bash
 git add -A
