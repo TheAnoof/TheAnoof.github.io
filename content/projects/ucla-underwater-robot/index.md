@@ -50,7 +50,7 @@ outcomes:
   - "Integrated pneumatic launcher system to shoot projectile underwater"
 
 contributions:
-  - "Fully designed and tested pneumatic launcher system, including prototyping and verifying solendoid function and iterating on components to launch projectile further"
+  - "Fully designed and tested pneumatic launcher system, including prototyping and verifying solenoid function and iterating on components to launch projectile further"
   - "Manufactured and assembled chassis, ensuring structural stiffness in underwater operation to prevent motor deflection"
   - "Created physical controller to integrate mechanical and electrical components"
   - "Created tether mount, implementing strain relief into electronics tether-chassis integration"

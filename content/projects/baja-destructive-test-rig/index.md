@@ -45,7 +45,7 @@ objectives:
 
 outcomes:
   - "Successfully manufactured and assembled test rig, clearing all tolerance requirements"
-  - "Validated that bearings are controlled failure mode through hand calculations and structural FEA"
+  - "Designed rig such that bearings are controlled failure mode, confirming via hand calculations and structural FEA"
 
 contributions:
   - "Designed all parts on jack to bearing load path including adjustable lever arm, bearing housing, and custom keyways"  

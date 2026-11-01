@@ -8,7 +8,7 @@
 
 # --- Card + page header ------------------------------------------------------
 title: "FSAE Wheels Subsystem"
-subtitle: "Designing wheel hub and uprights for maximum"
+subtitle: "Designing wheel hub anduprights along with managing vehicle integration"
 role: "Wheels Responsible Engineer"
 organization: "Formula SAE — Bruin Formula Racing"
 category: "Formula SAE"

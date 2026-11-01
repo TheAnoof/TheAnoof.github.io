@@ -68,7 +68,7 @@ objectives:
 
 # What the PROJECT / TEAM achieved.
 outcomes:
-  - "Designed a fully functioning electric go-kart, achieving top speed around a controlled track among 3 other groups."
+  - "Designed a fully functioning electric go-kart, achieving fastest time around a controlled track among 3 other groups."
   - "Presented designs at preliminary and final design reviews, applying feedback to make the go-kart safer and integrate systems more effectively."
 
 # What YOU personally did. Start each line with a verb (Designed, Machined...).
