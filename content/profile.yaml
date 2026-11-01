@@ -26,10 +26,10 @@ headline: Mechanical Engineering Student
 eyebrow: "UCLA | Mechanical Engineering | Class of 2029"
 
 # One line on what you do. Keep it under ~110 characters.
-tagline: "Designing, analyzing, building, and testing everything from cars to robots"
+tagline: "I design, analyze, machine, and test mechanical systems — from Formula SAE wheel hubs to underwater robots."
 
 # Two or three sentences max. The homepage should NOT be a biography.
-intro: "Mechanical engineering student owning design of mechanical and robotic systems. Seeking Summer 2027 roles in mechanical design, robotics, manufacturing, or testing."
+intro: "Mechanical engineering student who owns the wheel hub and upright design for Bruin Formula Racing and machines parts on Haas and Tormach CNC mills. Seeking Summer 2027 internships in mechanical design, robotics, manufacturing, or test."
 
 # Optional — delete the line or leave it empty if you don't want it shown.
 location: "Cupertino/Los Angeles, CA"
@@ -45,9 +45,10 @@ photo: ./images/WebsitePhoto.JPG
 
 # --- Contact & links ---------------------------------------------------------
 # These are public on the website. Use full addresses starting with https://
-email: anavsaxena.21@gmail.com # TODO: replace with your professional email
-linkedin: https://www.linkedin.com/in/anav-saxena # TODO: replace with your LinkedIn URL
-github: https://github.com/TheAnoof # TODO: confirm, or delete this line to hide GitHub
+email: anavsaxena.21@gmail.com
+linkedin: https://www.linkedin.com/in/anav-saxena
+# GitHub is shown in the site footer only. Delete this line to hide it.
+github: https://github.com/TheAnoof
 
 # --- Resume ------------------------------------------------------------------
 # Put your PDF in the folder:  public/resume/
@@ -87,26 +88,26 @@ focusAreas:
     title: Robotics
     emphasis: secondary
     label: Growing focus
-    description: "Work on personal projects in robotics building off of 4+ years in FIRST, wanting to dive deeper into human-robot interaction systems."
+    description: "Four years of FIRST Robotics and UCLA's ENGR 1UW underwater robotics course, which I now teach. Growing into human–robot interaction systems."
   - id: manufacturing
     title: Manufacturing
     emphasis: secondary
-    description: "Leverage experience in manual and CNC machine operation to design parts for precision manufacturing using available tools."
+    description: "Manual and CNC machining (Haas, Tormach) with CAM in Fusion 360 and Onshape — designing parts around the tools actually available."
   - id: test
     title: Test & validation
     emphasis: supporting
 
 # --- Projects page -----------------------------------------------------------
 # Short line under the "Projects" heading on the Projects page.
-projectsIntro: "A mix of past and ongoing work in various engineering teams and personal projects!"
+projectsIntro: "Formula SAE, Baja SAE, and UCLA project-course work — each taken beyond CAD into analysis, manufacturing, or testing."
 
 # --- Contact section (bottom of homepage) --------------------------------------
 contact:
-  heading: Get in touch!
-  message: "Currently seeking summer 2027 internships. Always down for talking about robotics, machining, or teaching. Connect with me via email or on LinkedIn!"
+  heading: Get in touch
+  message: "Seeking Summer 2027 internships in mechanical design, robotics, manufacturing, or test. Always glad to talk about robotics, machining, or teaching — reach me by email or on LinkedIn."
 
 # --- Search engines & link previews -----------------------------------------
 # Used for the browser-tab title and the preview card when the link is shared.
 seo:
   title: Anav Saxena — Mechanical Engineering Portfolio
-  description: Engineering design portfolio containing ongoing projects and past experiences.
+  description: "Portfolio of Anav Saxena, UCLA mechanical engineering student — mechanical design, FEA, CNC machining, and robotics projects from Formula SAE, Baja SAE, and UCLA courses."

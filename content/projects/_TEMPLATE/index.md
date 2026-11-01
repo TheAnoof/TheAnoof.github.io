@@ -87,13 +87,24 @@ decisions:
 skills: ["[Engineering skill placeholder]", "[Engineering skill placeholder]"]
 tools: ["[Software or tool placeholder]", "[Software or tool placeholder]"]
 
+# --- Video (optional) ---------------------------------------------------------
+# A short test or demo clip (.mp4 or .webm) in this project's images/ folder.
+# iPhone .MOV files must be exported as .mp4 first; keep clips under ~20 MB.
+# video: ./images/test-run.mp4
+# videoCaption: "What the video shows"
+
 # --- Gallery (CAD, drawings, test photos, diagrams) ----------------------------
 # Remove the "#"s to switch these on. Add as many as you like.
+# `section` (optional) groups figures into chapters such as "Design",
+# "Analysis", "Manufacturing", "Testing". Wide images (diagrams, spreadsheets)
+# automatically span the full width.
 # gallery:
 #   - src: ./images/cad-assembly.png
+#     section: "Design"
 #     alt: "Describe what the image shows, for screen readers"
-#     caption: "Short caption shown under the image"
+#     caption: "Explain what the viewer is looking at, not just the part name"
 #   - src: ./images/test-setup.jpg
+#     section: "Testing"
 #     alt: "..."
 #     caption: "..."
 ---
