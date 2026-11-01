@@ -59,7 +59,7 @@ metrics:
     note: "Best lap compared with each team's best lap on a controlled track"
   - value: "~12"
     label: "Runs completed"
-    note: "Most teams completed 1–3 runs"
+    note: "Most teams completed ~2-5 runs"
 
 # --- Team-level vs. personal -------------------------------------------------
 # What the PROJECT / TEAM set out to do.

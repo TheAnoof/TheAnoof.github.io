@@ -13,7 +13,7 @@
 title: About
 
 # One or two sentences shown large at the top of the page.
-lede: "Mechanical engineering student focused on taking parts from CAD and analysis through machining and test. I own the wheel hub and upright design for Bruin Formula Racing, designed a destructive-test rig for Baja SAE, and bring four years of FIRST Robotics experience, including mentoring my former team's CNC program."
+lede: "Mechanical engineering student focused on turning ideas into real-life results through CAD, analysis, machining, and testing. I own the wheel hub and upright design for Bruin Formula Racing, designed a destructive-test rig for Baja SAE, and bring four years of FIRST Robotics experience."
 
 # Your engineering interests. (Your focus areas from profile.yaml are shown
 # automatically — use this for more specific interests.)
@@ -74,6 +74,6 @@ skills:
 # currentFocus: "Currently owning mechanical design and mechanical-electrical integration of Formula SAE car wheel hubs and uprights along with working on delta-style robotic henna applicator as a personal project."
 ---
 
-I'm a second-year mechanical engineering student at UCLA. I like owning a part end to end: defining its loads, designing and analyzing it, planning how it will be made, and machining it myself.
+I'm a second-year mechanical engineering student at UCLA. I work on owning systems end-to-end. This means defining requirements, deriving operating conditions/loads, designing and analyzing components, reviewing parts for manufacturing/assembly, and often machining and putting together systems myself.
 
 I'm currently the Wheels Responsible Engineer on Bruin Formula Racing, an instructor for UCLA's ENGR 1UW underwater robotics course, and a technician in the UCLA Engineering Makerspace. I'm looking for internships where I can go deeper into mechanical design, robotic systems, and manufacturing.

@@ -26,10 +26,10 @@ headline: Mechanical Engineering Student
 eyebrow: "UCLA | Mechanical Engineering | Class of 2029"
 
 # One line on what you do. Keep it under ~110 characters.
-tagline: "I design, analyze, machine, and test mechanical systems — from Formula SAE wheel hubs to underwater robots."
+tagline: "I design, analyze, machine, and test mechanical systems, ranging from Formula SAE wheel hubs to underwater robots."
 
 # Two or three sentences max. The homepage should NOT be a biography.
-intro: "Mechanical engineering student who owns the wheel hub and upright design for Bruin Formula Racing and machines parts on Haas and Tormach CNC mills. Seeking Summer 2027 internships in mechanical design, robotics, manufacturing, or test."
+intro: "Mechanical engineering student with active ownership of wheel hub and upright design for Bruin Formula Racing and experience in a variety of manufacturing methods, including machining parts on Haas and Tormach CNC mills. Seeking Summer 2027 internships in mechanical design, robotics, manufacturing, or testing."
 
 # Optional — delete the line or leave it empty if you don't want it shown.
 location: "Cupertino/Los Angeles, CA"
@@ -99,12 +99,12 @@ focusAreas:
 
 # --- Projects page -----------------------------------------------------------
 # Short line under the "Projects" heading on the Projects page.
-projectsIntro: "Formula SAE, Baja SAE, and UCLA project-course work — each taken beyond CAD into analysis, manufacturing, or testing."
+projectsIntro: "Projects taking engineering beyond CAD and into analysis, manufacturing, and testing."
 
 # --- Contact section (bottom of homepage) --------------------------------------
 contact:
   heading: Get in touch
-  message: "Seeking Summer 2027 internships in mechanical design, robotics, manufacturing, or test. Always glad to talk about robotics, machining, or teaching — reach me by email or on LinkedIn."
+  message: "Seeking Summer 2027 internships in mechanical design, robotics, manufacturing, or testing. Always happy to talk about robotics, machining, or teaching! Reach out to me via email or on LinkedIn."
 
 # --- Search engines & link previews -----------------------------------------
 # Used for the browser-tab title and the preview card when the link is shared.
