@@ -132,7 +132,11 @@ const evidenceFor = (id: string) => projects.filter((p) => p.data.areas.includes
   .focus__evidence ul {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.2rem 0;
+  }
+
+  .focus__evidence a {
+    display: inline-block;
+    padding-block: 0.2rem;
   }
 
   /* Separator stays attached to the preceding link so it never starts a line. */

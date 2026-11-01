@@ -22,7 +22,8 @@ export default defineConfig({
       name: 'IBM Plex Sans',
       cssVariable: '--font-sans',
       weights: ['400 700'],
-      styles: ['normal', 'italic'],
+      // Italic is not used anywhere; omitting it saves a 75 KB preloaded file.
+      styles: ['normal'],
       subsets: ['latin'],
       fallbacks: ['system-ui', 'sans-serif'],
     },

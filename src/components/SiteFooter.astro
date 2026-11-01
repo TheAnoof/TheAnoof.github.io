@@ -61,9 +61,15 @@ const revision = new Date().toISOString().slice(0, 10);
   .site-footer__links {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
+    gap: var(--space-1) var(--space-5);
     font-size: var(--step--1);
     font-weight: 500;
+  }
+
+  /* Comfortable tap targets (≥ 24 px tall). */
+  .site-footer__links a {
+    display: inline-block;
+    padding-block: 0.3rem;
   }
 
   .site-footer__meta {

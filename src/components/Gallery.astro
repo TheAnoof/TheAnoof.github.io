@@ -1,49 +1,148 @@
 ---
 /**
- * Figure gallery for CAD, drawings, test photos and diagrams. Each figure is
- * numbered (Fig. 01, 02...) and links to the full-resolution image.
+ * Figure gallery for CAD, drawings, test photos and diagrams.
+ *
+ * - Figures are numbered (Fig. 01, 02...) and link to a full-size version.
+ * - Optional `section` values group figures into short chapters
+ *   ("Design", "Analysis", "Manufacturing"...), in order of first appearance.
+ * - Wide figures (diagrams, spreadsheets, tables) span the full width at their
+ *   natural shape so their text stays legible.
+ * - Figures with a plain background (CAD screenshots, diagrams) sit on a
+ *   backdrop of the same color, so they read as part of the page.
  */
 import type { ImageMetadata } from 'astro';
 import { getImage, Image } from 'astro:assets';
+import { edgeColor } from '../lib/imageTone';
 import { pad } from '../lib/site';
 
+interface Item {
+  src: ImageMetadata;
+  alt: string;
+  caption?: string;
+  section?: string;
+}
+
 interface Props {
-  items: { src: ImageMetadata; alt: string; caption?: string }[];
+  items: Item[];
 }
 
 const { items } = Astro.props;
 
-// Full-size versions (max 2400 px wide) for the "open image" links.
-const fullSize = await Promise.all(
-  items.map((item) => getImage({ src: item.src, width: Math.min(item.src.width, 2400) })),
+/** Wider than this (width ÷ height) spans the full gallery width. */
+const WIDE_RATIO = 1.8;
+
+const isPhoto = (img: ImageMetadata) => img.format === 'jpg' || img.format === 'jpeg';
+
+/** Responsive widths up to the original size — never upscaled, never capped below it. */
+function widthsFor(img: ImageMetadata, max: number): number[] {
+  const steps = [480, 800, 1200, 1600, 2000].filter((w) => w < img.width && w <= max);
+  if (img.width <= max) steps.push(img.width);
+  return steps.length ? steps : [img.width];
+}
+
+// Group by section, keeping first-appearance order; number figures in that order.
+const groups: { section?: string; items: Item[] }[] = [];
+for (const item of items) {
+  const key = item.section?.trim() || undefined;
+  let group = groups.find((g) => g.section === key);
+  if (!group) groups.push((group = { section: key, items: [] }));
+  group.items.push(item);
+}
+
+let n = 0;
+const figures = await Promise.all(
+  groups.map(async (group) => ({
+    section: group.section,
+    items: await Promise.all(
+      group.items.map(async (item) => {
+        const wide = item.src.width / item.src.height >= WIDE_RATIO;
+        const [full, backdrop] = await Promise.all([
+          getImage({
+            src: item.src,
+            width: Math.min(item.src.width, 2400),
+            quality: isPhoto(item.src) ? 72 : undefined,
+          }),
+          edgeColor(item.src),
+        ]);
+        return { ...item, wide, full, backdrop, index: 0 };
+      }),
+    ),
+  })),
 );
+for (const group of figures) for (const fig of group.items) fig.index = ++n;
 ---
 
-<ol class="gallery" role="list">
+<div class="gallery-groups">
   {
-    items.map((item, i) => (
-      <li>
-        <figure class="figure">
-          <a href={fullSize[i].src} class="figure__link" aria-label={`Open full-size image: ${item.alt}`}>
-            <Image
-              src={item.src}
-              alt={item.alt}
-              widths={[480, 800, 1200, 1600].filter((w) => w <= item.src.width)}
-              sizes="(min-width: 72rem) 36rem, (min-width: 45rem) 50vw, 100vw"
-              class="figure__img"
-            />
-          </a>
-          <figcaption>
-            <span class="label figure__num">Fig. {pad(i + 1)}</span>
-            {item.caption && <span>{item.caption}</span>}
-          </figcaption>
-        </figure>
-      </li>
+    figures.map((group) => (
+      <div class="gallery-group">
+        {group.section && <h3 class="gallery-group__title">{group.section}</h3>}
+        <ol class="gallery" role="list">
+          {group.items.map((fig) => {
+            // When the alt text just repeats the caption, let the caption
+            // describe the figure so screen readers don't read it twice.
+            const altRepeatsCaption = !!fig.caption && fig.alt.trim() === fig.caption.trim();
+            const label = `Fig. ${pad(fig.index)}`;
+            return (
+              <li class:list={[{ 'is-wide': fig.wide }]}>
+                <figure class="figure">
+                  <a
+                    href={fig.full.src}
+                    class:list={['figure__link', { 'figure__link--wide': fig.wide, 'figure__link--blend': fig.backdrop }]}
+                    style={fig.backdrop ? `--backdrop: ${fig.backdrop}` : undefined}
+                    target="_blank"
+                    rel="noopener"
+                    aria-label={`${label}${altRepeatsCaption ? '' : `: ${fig.alt}`} — open full size in a new tab`}
+                  >
+                    <Image
+                      src={fig.src}
+                      alt={altRepeatsCaption ? '' : fig.alt}
+                      widths={widthsFor(fig.src, 2000)}
+                      sizes={
+                        fig.wide
+                          ? '(min-width: 72rem) 72rem, 100vw'
+                          : '(min-width: 72rem) 36rem, (min-width: 45rem) 50vw, 100vw'
+                      }
+                      quality={isPhoto(fig.src) ? 72 : undefined}
+                      class="figure__img"
+                    />
+                  </a>
+                  <figcaption>
+                    <span class="label figure__num">{label}</span>
+                    {fig.caption && <span>{fig.caption}</span>}
+                  </figcaption>
+                </figure>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
     ))
   }
-</ol>
+</div>
 
 <style>
+  .gallery-groups {
+    display: grid;
+    gap: var(--space-7);
+  }
+
+  .gallery-group__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    font-size: var(--step-1);
+  }
+
+  /* A short rule after the chapter title, echoing the section labels. */
+  .gallery-group__title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--rule);
+  }
+
   .gallery {
     display: grid;
     grid-template-columns: 1fr;
@@ -54,6 +153,10 @@ const fullSize = await Promise.all(
     .gallery {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
+    .gallery > .is-wide {
+      grid-column: 1 / -1;
+    }
   }
 
   .figure {
@@ -61,27 +164,71 @@ const fullSize = await Promise.all(
     gap: var(--space-3);
   }
 
+  /* A chapter with a single standard figure: image and caption side by side,
+     so the row is used intentionally rather than left half empty. */
+  @media (min-width: 45rem) {
+    .gallery > li:only-child:not(.is-wide) {
+      grid-column: 1 / -1;
+    }
+
+    .gallery > li:only-child:not(.is-wide) .figure {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: var(--space-6);
+      align-items: center;
+    }
+
+    .gallery > li:only-child:not(.is-wide) figcaption {
+      flex-direction: column;
+      gap: var(--space-2);
+      color: var(--ink);
+      font-size: var(--step-0);
+      line-height: var(--leading);
+    }
+  }
+
   .figure__link {
     display: block;
     overflow: hidden;
     border: var(--image-border-width) solid var(--image-border-color);
     border-radius: var(--radius);
-    background: var(--surface);
+    background: var(--backdrop, var(--surface));
     cursor: zoom-in;
   }
 
-  .figure__img {
-    width: 100%;
-    height: auto;
+  /* Standard figures share a 4:3 frame so rows line up; the whole image is
+     always visible (never cropped), centered in the frame. */
+  .figure__link:not(.figure__link--wide) {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
     aspect-ratio: 4 / 3;
-    object-fit: contain;
-    background: var(--surface);
+  }
+
+  .figure__img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  /* Wide figures keep their natural proportions at full width. */
+  .figure__link--wide .figure__img {
+    width: 100%;
+  }
+
+  /* Plain-background figures fade into a backdrop of the same color. */
+  .figure__link--blend .figure__img {
+    -webkit-mask-image: var(--feather-x), var(--feather-y);
+    mask-image: var(--feather-x), var(--feather-y);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
   }
 
   figcaption {
     display: flex;
     gap: var(--space-3);
     align-items: baseline;
+    max-width: var(--measure);
     color: var(--ink-2);
     font-size: var(--step--1);
     line-height: var(--leading-snug);

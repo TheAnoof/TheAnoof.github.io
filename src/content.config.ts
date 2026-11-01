@@ -94,6 +94,8 @@ const about = defineCollection({
           organization: z.string().optional(),
           dates: z.string().optional(),
           summary: z.string().optional(),
+          // Optional bullet points (e.g. copied from your resume).
+          points: z.array(z.string()).default([]),
           link: z.string().optional(),
         }),
       )
@@ -178,9 +180,20 @@ const projects = defineCollection({
             src: image(),
             alt: z.string(),
             caption: z.string().optional(),
+            // Optional chapter heading, e.g. "Design", "Analysis",
+            // "Manufacturing". Figures with the same section are grouped.
+            section: z.string().optional(),
           }),
         )
         .default([]),
+
+      // --- Video (optional) ------------------------------------------------
+      // Path to an .mp4 or .webm file in this project's images/ folder.
+      video: z
+        .string()
+        .regex(/\.(mp4|webm)$/i, { error: 'Use an .mp4 or .webm video file (e.g. ./images/test-run.mp4).' })
+        .optional(),
+      videoCaption: z.string().optional(),
     }),
 });
 

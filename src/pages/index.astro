@@ -55,16 +55,6 @@ const projects = await getProjects();
                 </li>
               )
             }
-            {
-              profile.github && (
-                <li>
-                  <a href={profile.github} target="_blank" rel="noopener noreferrer">
-                    <Icon name="github" size={16} />
-                    GitHub
-                  </a>
-                </li>
-              )
-            }
             <li>
               <a href={`mailto:${profile.email}`}>
                 <Icon name="mail" size={16} />
@@ -91,7 +81,7 @@ const projects = await getProjects();
       <div class="hero__portrait rise" style="--i: 2">
         <MediaFrame
           image={profile.photo}
-          alt={profile.photoAlt}
+          alt={profile.photoAlt || `Portrait of ${profile.name}`}
           aspect="4 / 5"
           sizes="(min-width: 52rem) 22rem, 6.5rem"
           widths={[288, 440, 640, 880]}
@@ -103,23 +93,11 @@ const projects = await getProjects();
     </div>
   </section>
 
-  <!-- Focus areas ---------------------------------------------------------- -->
-  {
-    profile.focusAreas.length > 0 && (
-      <section class="section focus-section" aria-labelledby="focus-title">
-        <div class="container">
-          <SectionHeader index="01" label="Focus" title="What I work on" id="focus-title" />
-          <FocusAreas areas={profile.focusAreas} projects={projects} />
-        </div>
-      </section>
-    )
-  }
-
   <!-- Selected work ------------------------------------------------------- -->
   <section class="section" aria-labelledby="work-title">
     <div class="container">
       <div class="work__header">
-        <SectionHeader index="02" label="Selected work" title="Projects" id="work-title" />
+        <SectionHeader index="01" label="Selected work" title="Projects" id="work-title" />
         <div class="dimension" aria-hidden="true">
           <span class="dimension__line"></span>
           <span class="label dimension__text">
@@ -132,6 +110,18 @@ const projects = await getProjects();
       <ProjectGrid projects={projects} />
     </div>
   </section>
+
+  <!-- Focus areas ---------------------------------------------------------- -->
+  {
+    profile.focusAreas.length > 0 && (
+      <section class="section focus-section" aria-labelledby="focus-title">
+        <div class="container">
+          <SectionHeader index="02" label="Focus" title="What I work on" id="focus-title" />
+          <FocusAreas areas={profile.focusAreas} projects={projects} />
+        </div>
+      </section>
+    )
+  }
 
   <ContactBlock index="03" />
 </BaseLayout>

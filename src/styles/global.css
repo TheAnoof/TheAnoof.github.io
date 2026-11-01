@@ -226,9 +226,11 @@ a:hover {
     animation-delay: calc(var(--i, 0) * 70ms);
   }
 
+  /* Starts partly visible, so content is never hidden if the animation is
+     paused (e.g. in a background tab). */
   @keyframes rise {
     from {
-      opacity: 0;
+      opacity: 0.4;
       transform: translateY(8px);
     }
     to {

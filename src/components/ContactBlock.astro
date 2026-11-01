@@ -23,15 +23,7 @@ if (profile.linkedin) {
     external: true,
   });
 }
-if (profile.github) {
-  rows.push({
-    label: 'GitHub',
-    value: profile.github.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, ''),
-    href: profile.github,
-    icon: 'github',
-    external: true,
-  });
-}
+// GitHub appears in the site footer only.
 rows.push({
   label: 'Resume',
   value: 'Download PDF',

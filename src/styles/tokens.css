@@ -25,6 +25,10 @@
   --image-border-color: var(--accent-strong);
   --image-border-width: 2px;
 
+  /* Edge feathering used to blend plain-background figures into their frame. */
+  --feather-x: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  --feather-y: linear-gradient(to bottom, transparent, #000 5%, #000 95%, transparent);
+
   /* ---- Typography --------------------------------------------------------- */
   --font-body: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-label: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;

@@ -43,13 +43,39 @@ interface Props {
 const { project, prev, next } = Astro.props;
 const { data } = project;
 
+// --- Video: resolve `video: ./images/<file>.mp4` to a published URL ---------
+const videoFiles = import.meta.glob<string>('/content/projects/*/images/*.{mp4,webm,MP4,WEBM}', {
+  // 'no-inline' keeps videos as separate files even if very small.
+  query: '?url&no-inline',
+  import: 'default',
+  eager: true,
+});
+let videoUrl: string | undefined;
+if (data.video) {
+  const key = `/content/projects/${project.id}/${data.video.replace(/^\.\//, '')}`;
+  videoUrl = videoFiles[key];
+  if (!videoUrl) {
+    throw new Error(
+      `content/projects/${project.id}/index.md: video "${data.video}" was not found. ` +
+        `Put the file in content/projects/${project.id}/images/ and check the filename (capital letters matter).`,
+    );
+  }
+}
+
+// --- Hero: crop only wide, high-resolution photos -----------------------------
+// Near-square or low-resolution covers (and CAD screenshots with a plain
+// background) are shown whole instead of being cropped and enlarged.
+const cover = data.cover;
+const coverRatio = cover ? cover.width / cover.height : 0;
+const heroFit = !cover ? 'cover' : coverRatio < 1.25 || cover.width < 1400 ? 'contain' : 'auto';
+
 // Number only the sections that actually have content.
 const sections = {
   overview: true,
   scope: data.objectives.length > 0 || data.outcomes.length > 0,
   contribution: data.contributions.length > 0 || data.decisions.length > 0,
   skills: data.skills.length > 0 || data.tools.length > 0,
-  gallery: data.gallery.length > 0,
+  gallery: data.gallery.length > 0 || Boolean(videoUrl),
 };
 const numbers: Partial<Record<keyof typeof sections, string>> = {};
 let n = 0;
@@ -94,10 +120,12 @@ for (const [key, present] of Object.entries(sections)) {
       <MediaFrame
         image={data.cover}
         alt={data.coverAlt}
-        aspect="16 / 9"
+        aspect={heroFit === 'contain' ? '4 / 3' : '16 / 9'}
         aspectWide="2 / 1"
         sizes="(min-width: 72rem) 72rem, 100vw"
         eager
+        fit={heroFit}
+        inset
         placeholderLabel="Hero image placeholder"
       />
       {data.coverCaption && <figcaption class="hero-figure__caption">{data.coverCaption}</figcaption>}
@@ -107,16 +135,7 @@ for (const [key, present] of Object.entries(sections)) {
     <section class="section overview" aria-labelledby="overview-title">
       <div class="container">
         <SectionHeader index={numbers.overview} label="Overview" title="At a glance" id="overview-title" />
-        <div class="overview__grid">
-          <p class="overview__summary">{data.summary}</p>
-          {
-            data.tags.length > 0 && (
-              <div class="overview__tags">
-                <TagList items={data.tags} label="Project keywords" />
-              </div>
-            )
-          }
-        </div>
+        <p class="overview__summary">{data.summary}</p>
         {
           data.metrics.length > 0 && (
             <div class="overview__metrics">
@@ -239,7 +258,25 @@ for (const [key, present] of Object.entries(sections)) {
         <section class="section" aria-labelledby="gallery-title">
           <div class="container">
             <SectionHeader index={numbers.gallery} label="Figures" title="Images, CAD & diagrams" id="gallery-title" />
-            <Gallery items={data.gallery} />
+            {videoUrl && (
+              <figure class="video-figure">
+                {/* "#t=0.1" makes Safari show the first frame before playback. */}
+                <video
+                  class="video-figure__media"
+                  src={`${videoUrl}#t=0.1`}
+                  controls
+                  muted
+                  playsinline
+                  preload="metadata"
+                  aria-label={data.videoCaption ?? `Video: ${data.title}`}
+                />
+                <figcaption>
+                  <span class="label video-figure__label">Video</span>
+                  {data.videoCaption && <span>{data.videoCaption}</span>}
+                </figcaption>
+              </figure>
+            )}
+            {data.gallery.length > 0 && <Gallery items={data.gallery} />}
           </div>
         </section>
       )
@@ -292,6 +329,9 @@ for (const [key, present] of Object.entries(sections)) {
   }
 
   .breadcrumb a {
+    display: inline-block;
+    padding-block: 0.3rem;
+    margin-block: -0.3rem;
     color: var(--ink-3);
     text-decoration: none;
   }
@@ -340,21 +380,8 @@ for (const [key, present] of Object.entries(sections)) {
   }
 
   /* ---- Overview --------------------------------------------------------------- */
-  .overview__grid {
-    display: grid;
-    gap: var(--space-5);
-  }
-
-  @media (min-width: 60rem) {
-    .overview__grid {
-      grid-template-columns: minmax(0, 1fr) 18rem;
-      gap: var(--space-8);
-      align-items: start;
-    }
-  }
-
   .overview__summary {
-    max-width: 60ch;
+    max-width: 62ch;
     font-size: var(--step-1);
     line-height: 1.55;
   }
@@ -499,6 +526,33 @@ for (const [key, present] of Object.entries(sections)) {
 
   .skills__title {
     margin-bottom: var(--space-3);
+  }
+
+  /* ---- Video -------------------------------------------------------------------- */
+  .video-figure {
+    display: grid;
+    gap: var(--space-3);
+    margin-bottom: var(--space-7);
+  }
+
+  .video-figure__media {
+    width: 100%;
+    max-height: 75vh;
+    border: var(--image-border-width) solid var(--image-border-color);
+    border-radius: var(--radius);
+    background: var(--ink);
+  }
+
+  .video-figure figcaption {
+    display: flex;
+    gap: var(--space-3);
+    align-items: baseline;
+    color: var(--ink-2);
+    font-size: var(--step--1);
+  }
+
+  .video-figure__label {
+    color: var(--accent);
   }
 
   /* ---- Pager -------------------------------------------------------------------- */
