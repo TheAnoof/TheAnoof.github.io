@@ -1,3 +1,6 @@
+import { createHash } from 'node:crypto';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 
 export type Profile = CollectionEntry<'profile'>['data'];
@@ -13,6 +16,25 @@ export function url(path: string): string {
   if (/^(https?:|mailto:|tel:|#)/.test(path)) return path;
   const base = import.meta.env.BASE_URL.replace(/\/$/, '');
   return `${base}/${path.replace(/^\//, '')}`;
+}
+
+/** Where the resume PDF lives on disk (public/ + the path in profile.yaml). */
+export function resumePath(profile: Profile): string {
+  return join(process.cwd(), 'public', profile.resume.file);
+}
+
+/**
+ * Link to the resume PDF with a short fingerprint of its contents, e.g.
+ * /resume/Resume.pdf?v=3f9a1c2b. Replacing the PDF changes the fingerprint,
+ * so browsers (and the embedded preview) always fetch the new version instead
+ * of showing a copy they saved earlier.
+ */
+export function resumeHref(profile: Profile): string {
+  const href = url(profile.resume.file);
+  const path = resumePath(profile);
+  if (!existsSync(path)) return href;
+  const version = createHash('sha1').update(readFileSync(path)).digest('hex').slice(0, 8);
+  return `${href}?v=${version}`;
 }
 
 export async function getProfile(): Promise<Profile> {

@@ -1,6 +1,6 @@
 ---
 /** Contact section: a short message and a spec-table of ways to reach out. */
-import { getProfile, url } from '../lib/site';
+import { getProfile, resumeHref } from '../lib/site';
 import Icon, { type IconName } from './Icon.astro';
 import SectionHeader from './SectionHeader.astro';
 
@@ -35,7 +35,7 @@ if (profile.github) {
 rows.push({
   label: 'Resume',
   value: 'Download PDF',
-  href: url(profile.resume.file),
+  href: resumeHref(profile),
   icon: 'download',
   download: profile.resume.downloadName,
 });

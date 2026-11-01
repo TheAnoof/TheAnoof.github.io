@@ -11,7 +11,7 @@ import MediaFrame from '../components/MediaFrame.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getProfile, getProjects, url } from '../lib/site';
+import { getProfile, getProjects, resumeHref, url } from '../lib/site';
 
 const profile = await getProfile();
 const projects = await getProjects();
@@ -77,7 +77,7 @@ const projects = await getProjects();
         <div class="hero__actions rise" style="--i: 4">
           <ButtonLink href={url('/projects/')} icon="arrow-right">View projects</ButtonLink>
           <ButtonLink
-            href={url(profile.resume.file)}
+            href={resumeHref(profile)}
             download={profile.resume.downloadName}
             variant="secondary"
             icon="download"

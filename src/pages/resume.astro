@@ -5,17 +5,15 @@
  * set in content/profile.yaml (resume.file).
  */
 import { existsSync } from 'node:fs';
-import { join } from 'node:path';
 import ButtonLink from '../components/ButtonLink.astro';
 import Icon from '../components/Icon.astro';
 import PageHeader from '../components/PageHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getProfile, url } from '../lib/site';
+import { getProfile, resumeHref, resumePath } from '../lib/site';
 
 const profile = await getProfile();
-const pdfHref = url(profile.resume.file);
-const pdfPath = join(process.cwd(), 'public', profile.resume.file);
-const pdfExists = existsSync(pdfPath);
+const pdfHref = resumeHref(profile);
+const pdfExists = existsSync(resumePath(profile));
 if (!pdfExists) {
   console.warn(`[resume] PDF not found at public${profile.resume.file} — the resume page will show a notice.`);
 }
