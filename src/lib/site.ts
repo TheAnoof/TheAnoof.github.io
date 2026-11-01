@@ -24,7 +24,8 @@ export async function getProfile(): Promise<Profile> {
 /** Published projects (draft: false), sorted by `order` then title. */
 export async function getProjects(): Promise<Project[]> {
   const [projects, profile] = await Promise.all([
-    getCollection('projects', ({ data }) => import.meta.env.DEV || !data.draft),
+    // `draft: true` hides a project everywhere — live site and local preview.
+    getCollection('projects', ({ data }) => !data.draft),
     getProfile(),
   ]);
 

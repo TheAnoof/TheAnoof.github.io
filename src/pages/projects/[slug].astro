@@ -6,11 +6,11 @@
  * Information order (high-level → deep):
  *   header + title block → hero image → overview & key metrics →
  *   team scope (objectives / outcomes) → my contribution & decisions →
- *   technical details → figures
+ *   skills & tools → figures
  * Sections with no content are skipped and the numbering adjusts.
+ * (Text below the second "---" in a project file is not displayed.)
  */
 import type { GetStaticPaths } from 'astro';
-import { render } from 'astro:content';
 import DecisionList from '../../components/DecisionList.astro';
 import Gallery from '../../components/Gallery.astro';
 import Icon from '../../components/Icon.astro';
@@ -42,15 +42,13 @@ interface Props {
 
 const { project, prev, next } = Astro.props;
 const { data } = project;
-const { Content } = await render(project);
-const hasBody = Boolean(project.body?.trim());
 
 // Number only the sections that actually have content.
 const sections = {
   overview: true,
   scope: data.objectives.length > 0 || data.outcomes.length > 0,
   contribution: data.contributions.length > 0 || data.decisions.length > 0,
-  technical: hasBody || data.skills.length > 0 || data.tools.length > 0,
+  skills: data.skills.length > 0 || data.tools.length > 0,
   gallery: data.gallery.length > 0,
 };
 const numbers: Partial<Record<keyof typeof sections, string>> = {};
@@ -210,38 +208,24 @@ for (const [key, present] of Object.entries(sections)) {
       )
     }
 
-    <!-- 04 Technical details ------------------------------------------------- -->
+    <!-- 04 Skills & tools ---------------------------------------------------- -->
     {
-      sections.technical && (
-        <section class="section" aria-labelledby="technical-title">
+      sections.skills && (
+        <section class="section" aria-labelledby="skills-title">
           <div class="container">
-            <SectionHeader
-              index={numbers.technical}
-              label="Technical details"
-              title="Engineering detail"
-              id="technical-title"
-            />
-            <div class="technical__grid">
-              {hasBody && (
-                <div class="prose">
-                  <Content />
+            <SectionHeader index={numbers.skills} label="Skills & tools" title="Skills applied" id="skills-title" />
+            <div class="skills">
+              {data.skills.length > 0 && (
+                <div class="skills__group">
+                  <h3 class="label skills__title">Engineering skills</h3>
+                  <TagList items={data.skills} />
                 </div>
               )}
-              {(data.skills.length > 0 || data.tools.length > 0) && (
-                <aside class="technical__aside" aria-label="Skills and tools">
-                  {data.skills.length > 0 && (
-                    <div>
-                      <h3 class="label technical__aside-title">Engineering skills</h3>
-                      <TagList items={data.skills} />
-                    </div>
-                  )}
-                  {data.tools.length > 0 && (
-                    <div>
-                      <h3 class="label technical__aside-title">Tools & software</h3>
-                      <TagList items={data.tools} />
-                    </div>
-                  )}
-                </aside>
+              {data.tools.length > 0 && (
+                <div class="skills__group">
+                  <h3 class="label skills__title">Tools & software</h3>
+                  <TagList items={data.tools} />
+                </div>
               )}
             </div>
           </div>
@@ -491,26 +475,8 @@ for (const [key, present] of Object.entries(sections)) {
     margin-bottom: var(--space-4);
   }
 
-  /* ---- Technical ------------------------------------------------------------- */
-  .technical__grid {
-    display: grid;
-    gap: var(--space-7);
-  }
-
-  @media (min-width: 60rem) {
-    .technical__grid {
-      grid-template-columns: minmax(0, 1fr) 17rem;
-      gap: var(--space-8);
-      align-items: start;
-    }
-
-    .technical__aside {
-      position: sticky;
-      top: calc(var(--header-h) + var(--space-5));
-    }
-  }
-
-  .technical__aside {
+  /* ---- Skills & tools ---------------------------------------------------------- */
+  .skills {
     display: grid;
     gap: var(--space-5);
     padding: var(--space-5);
@@ -519,7 +485,19 @@ for (const [key, present] of Object.entries(sections)) {
     background: var(--surface);
   }
 
-  .technical__aside-title {
+  @media (min-width: 45rem) {
+    .skills:has(> .skills__group + .skills__group) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7);
+    }
+
+    .skills__group + .skills__group {
+      padding-left: var(--space-7);
+      border-left: 1px solid var(--rule);
+    }
+  }
+
+  .skills__title {
     margin-bottom: var(--space-3);
   }
 

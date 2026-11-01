@@ -45,7 +45,7 @@ if (image && !candidateWidths.includes(image.width) && image.width < 2000) {
 ---
 
 <div
-  class:list={['frame', { 'frame--marks': marks, 'frame--wide': aspectWide }, className]}
+  class:list={['frame', { 'frame--image': image, 'frame--marks': marks, 'frame--wide': aspectWide }, className]}
   style={`--aspect: ${aspect};${aspectWide ? ` --aspect-wide: ${aspectWide};` : ''}`}
 >
   {
@@ -92,6 +92,11 @@ if (image && !candidateWidths.includes(image.width) && image.width < 2000) {
     .frame--wide {
       aspect-ratio: var(--aspect-wide);
     }
+  }
+
+  /* Real images get a defined border (color/width set in tokens.css). */
+  .frame--image {
+    border: var(--image-border-width) solid var(--image-border-color);
   }
 
   .frame__img {
@@ -176,9 +181,12 @@ if (image && !candidateWidths.includes(image.width) && image.width < 2000) {
     overflow: visible;
   }
 
-  .frame--marks .frame__img,
   .frame--marks .frame__placeholder {
     border-radius: var(--radius);
+  }
+
+  .frame--marks .frame__img {
+    border-radius: calc(var(--radius) - var(--image-border-width));
   }
 
   .frame--marks .frame__img {

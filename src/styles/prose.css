@@ -48,7 +48,7 @@
 }
 
 .prose img {
-  border: 1px solid var(--rule);
+  border: var(--image-border-width) solid var(--image-border-color);
   border-radius: var(--radius);
   background: var(--surface);
 }

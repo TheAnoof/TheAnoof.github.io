@@ -25,26 +25,54 @@ const projects = await getProjects();
         <p class="label hero__eyebrow rise" style="--i: 0">{profile.eyebrow}</p>
         <h1 id="hero-name" class="hero__name rise" style="--i: 1">{profile.name}</h1>
         <p class="hero__tagline rise" style="--i: 2">{profile.tagline}</p>
-        <p class="hero__intro rise" style="--i: 3">{profile.intro}</p>
+        <div class="panel hero__panel rise" style="--i: 3">
+          <p class="hero__intro">{profile.intro}</p>
 
-        {
-          (profile.availability || profile.location) && (
-            <p class="hero__status rise" style="--i: 3">
-              {profile.availability && (
-                <span class="hero__availability">
+          <ul class="hero__meta" role="list">
+            {
+              profile.availability && (
+                <li class="hero__availability">
                   <span class="hero__dot" aria-hidden="true" />
                   {profile.availability}
-                </span>
-              )}
-              {profile.location && (
-                <span class="hero__location">
-                  <Icon name="map-pin" size={15} />
+                </li>
+              )
+            }
+            {
+              profile.location && (
+                <li class="hero__location">
+                  <Icon name="map-pin" size={16} />
                   {profile.location}
-                </span>
-              )}
-            </p>
-          )
-        }
+                </li>
+              )
+            }
+            {
+              profile.linkedin && (
+                <li>
+                  <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
+                    <Icon name="linkedin" size={16} />
+                    LinkedIn
+                  </a>
+                </li>
+              )
+            }
+            {
+              profile.github && (
+                <li>
+                  <a href={profile.github} target="_blank" rel="noopener noreferrer">
+                    <Icon name="github" size={16} />
+                    GitHub
+                  </a>
+                </li>
+              )
+            }
+            <li>
+              <a href={`mailto:${profile.email}`}>
+                <Icon name="mail" size={16} />
+                {profile.email}
+              </a>
+            </li>
+          </ul>
+        </div>
 
         <div class="hero__actions rise" style="--i: 4">
           <ButtonLink href={url('/projects/')} icon="arrow-right">View projects</ButtonLink>
@@ -58,35 +86,6 @@ const projects = await getProjects();
             Download resume
           </ButtonLink>
         </div>
-
-        <ul class="hero__links rise" role="list" style="--i: 5">
-          {
-            profile.linkedin && (
-              <li>
-                <a href={profile.linkedin} target="_blank" rel="noopener noreferrer">
-                  <Icon name="linkedin" size={17} />
-                  LinkedIn
-                </a>
-              </li>
-            )
-          }
-          {
-            profile.github && (
-              <li>
-                <a href={profile.github} target="_blank" rel="noopener noreferrer">
-                  <Icon name="github" size={17} />
-                  GitHub
-                </a>
-              </li>
-            )
-          }
-          <li>
-            <a href={`mailto:${profile.email}`}>
-              <Icon name="mail" size={17} />
-              {profile.email}
-            </a>
-          </li>
-        </ul>
       </div>
 
       <div class="hero__portrait rise" style="--i: 2">
@@ -207,39 +206,55 @@ const projects = await getProjects();
     text-wrap: balance;
   }
 
-  .hero__intro {
-    margin-top: var(--space-4);
-    max-width: 58ch;
-    color: var(--ink-2);
+  /* White panel: intro + location + contact links, for stronger contrast. */
+  .hero__panel {
+    margin-top: var(--space-5);
+    max-width: 40rem;
   }
 
-  .hero__status {
+  .hero__intro {
+    max-width: 58ch;
+    color: var(--ink);
+  }
+
+  .hero__meta {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
-    margin-top: var(--space-5);
+    gap: var(--space-1) var(--space-5);
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--rule);
     font-size: var(--step--1);
-    color: var(--ink-2);
+    color: var(--ink);
   }
 
-  .hero__availability,
-  .hero__location {
+  .hero__meta li {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
+    min-height: 2.25rem;
   }
 
-  .hero__availability {
-    align-items: baseline;
-  }
-
-  .hero__location :global(svg) {
+  .hero__meta :global(svg) {
     flex-shrink: 0;
+    color: var(--ink-3);
+  }
+
+  .hero__meta a {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .hero__meta a:hover,
+  .hero__meta a:hover :global(svg) {
+    color: var(--accent);
   }
 
   .hero__dot {
     flex-shrink: 0;
-    align-self: center;
     width: 8px;
     height: 8px;
     border-radius: 50%;
@@ -251,28 +266,7 @@ const projects = await getProjects();
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
-    margin-top: var(--space-6);
-  }
-
-  .hero__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-2) var(--space-5);
     margin-top: var(--space-5);
-    font-size: var(--step--1);
-  }
-
-  .hero__links a {
-    display: inline-flex;
-    align-items: center;
-    gap: var(--space-2);
-    min-height: 2.25rem;
-    color: var(--ink-2);
-    text-decoration: none;
-  }
-
-  .hero__links a:hover {
-    color: var(--accent);
   }
 
   /* ---- Selected work header with a dimension-line count ------------------ */

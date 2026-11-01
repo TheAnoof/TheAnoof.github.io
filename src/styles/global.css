@@ -166,6 +166,22 @@ a:hover {
   color: var(--ink-3);
 }
 
+/* White text box — matches the panels on project pages. Text inside uses the
+   darker ink color so it stands out clearly from the off-white page. */
+.panel {
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  color: var(--ink);
+}
+
+@media (min-width: 45rem) {
+  .panel {
+    padding: var(--space-5) var(--space-6);
+  }
+}
+
 .visually-hidden {
   position: absolute !important;
   width: 1px;

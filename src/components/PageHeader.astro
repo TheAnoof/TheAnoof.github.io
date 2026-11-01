@@ -4,20 +4,32 @@ interface Props {
   eyebrow: string;
   title: string;
   lede?: string;
+  /** Put the lede in a white panel (used on About, where the lede is long). */
+  boxedLede?: boolean;
 }
 
-const { eyebrow, title, lede } = Astro.props;
+const { eyebrow, title, lede, boxedLede = false } = Astro.props;
 ---
 
 <header class="page-header">
-  <div class="container page-header__inner">
-    <div class="page-header__text">
-      <p class="label rise" style="--i: 0">{eyebrow}</p>
-      <h1 class="page-header__title rise" style="--i: 1">{title}</h1>
-      {lede && <p class="page-header__lede rise" style="--i: 2">{lede}</p>}
-      <slot />
+  <div class="container">
+    <p class="label page-header__eyebrow rise" style="--i: 0">{eyebrow}</p>
+    <!-- Text and optional aside (e.g. the About photo) share one row, so the
+         aside spans exactly from the top of the title to the bottom of the text. -->
+    <div class="page-header__inner">
+      <div class="page-header__text">
+        <h1 class="page-header__title rise" style="--i: 1">{title}</h1>
+        {
+          lede && (
+            <p class:list={['page-header__lede', 'rise', { 'panel page-header__lede--boxed': boxedLede }]} style="--i: 2">
+              {lede}
+            </p>
+          )
+        }
+        <slot />
+      </div>
+      <slot name="aside" />
     </div>
-    <slot name="aside" />
   </div>
 </header>
 
@@ -26,15 +38,20 @@ const { eyebrow, title, lede } = Astro.props;
     padding-block: clamp(2.5rem, 1.6rem + 4vw, 5rem) var(--space-5);
   }
 
+  .page-header__eyebrow {
+    margin-bottom: var(--space-4);
+  }
+
   .page-header__inner {
     display: grid;
     gap: var(--space-6);
   }
 
+  /* With an aside: two columns; the aside stretches to the text's height. */
   @media (min-width: 52rem) {
     .page-header__inner:has(> :nth-child(2)) {
       grid-template-columns: minmax(0, 1fr) auto;
-      align-items: end;
+      gap: var(--space-8);
     }
   }
 
@@ -54,5 +71,10 @@ const { eyebrow, title, lede } = Astro.props;
     max-width: 52ch;
     color: var(--ink-2);
     font-size: var(--step-1);
+  }
+
+  .page-header__lede--boxed {
+    max-width: 44rem;
+    color: var(--ink);
   }
 </style>

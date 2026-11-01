@@ -45,9 +45,9 @@ rows.push({
   <div class="container contact__grid">
     <div>
       <SectionHeader index={index} label="Contact" title={profile.contact.heading} id="contact-title" />
-      <p class="contact__message">{profile.contact.message}</p>
+      <p class="panel contact__message">{profile.contact.message}</p>
     </div>
-    <ul class="contact__list" role="list">
+    <ul class="panel contact__list" role="list">
       {
         rows.map((row) => (
           <li>
@@ -87,13 +87,18 @@ rows.push({
   }
 
   .contact__message {
-    max-width: 44ch;
-    color: var(--ink-2);
+    max-width: 34rem;
     font-size: var(--step-1);
   }
 
+  /* Rows run edge-to-edge inside the panel so the hover tint fills the row. */
   .contact__list {
-    border-top: 1px solid var(--ink);
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .contact__list li:last-child .contact__row {
+    border-bottom: 0;
   }
 
   .contact__row {
@@ -102,7 +107,7 @@ rows.push({
     align-items: center;
     gap: var(--space-4);
     min-height: 3.5rem;
-    padding: var(--space-3) var(--space-1);
+    padding: var(--space-3) var(--space-5);
     border-bottom: 1px solid var(--rule);
     color: var(--ink);
     text-decoration: none;

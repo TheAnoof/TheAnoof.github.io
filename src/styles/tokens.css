@@ -20,6 +20,11 @@
   --accent-line: #a7b6d6;    /* tinted borders */
   --on-accent: #ffffff;
 
+  /* Border drawn around every photo / CAD image. Change these two values to
+     experiment (e.g. width 1px, or color var(--ink) for near-black). */
+  --image-border-color: var(--accent-strong);
+  --image-border-width: 2px;
+
   /* ---- Typography --------------------------------------------------------- */
   --font-body: var(--font-sans), system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-label: var(--font-mono), ui-monospace, 'SF Mono', Menlo, monospace;

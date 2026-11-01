@@ -80,8 +80,8 @@ the bottom of each section. **⟲ = worth revisiting later.**
   the projects that evidence it → all project cards → contact.
 - **Project page order:** title block → hero image → **At a glance** (summary +
   key metrics) → **Project scope — Team** (objectives, outcomes) → **My
-  contribution — Individual** (role, contributions, key decisions) → technical
-  details + skills/tools → figures → previous/next. Metrics were moved up next to
+  contribution — Individual** (role, contributions, key decisions) → skills &
+  tools → figures → previous/next. Metrics were moved up next to
   the summary (rather than after contributions) so the impact is visible
   without scrolling deep. "Team" vs "Individual" tags make the boundary of
   personal contribution explicit.
@@ -142,3 +142,23 @@ the optional `esbuild` and `fsevents` install scripts; both work without them.
 - `_config.yml`: **removed**. It configured GitHub's legacy Jekyll build, which
   no longer runs once Pages is switched to "GitHub Actions". Its title and
   description were carried into `content/profile.yaml`.
+
+## Revisions (2026-10-31, after Anav's content review)
+
+- **Removed the "Engineering detail" (Markdown write-up) section** from project
+  pages; the skills/tools panel became its own "Skills & tools" section. Text
+  below a project file's closing `---` is no longer displayed, and the
+  placeholder write-up text was removed from the project files.
+- **Drafts are hidden everywhere.** Previously `draft: true` projects still
+  appeared in the local preview (`npm run dev`), which made it look like the
+  setting wasn't working. Now preview and live site always match.
+- **Images get a 2 px dark blueprint-blue border** (`--image-border-color` /
+  `--image-border-width` in `tokens.css`) so photos and CAD renders read as
+  framed figures instead of floating on the page. ⟲ experimental
+- **Custom favicon removed.** GitHub Pages provides none by default, so
+  browsers show their own generic tab icon (same as the original site).
+- **White panels for body text on Home and About** (`.panel` in `global.css`,
+  matching the project-page panels). Text inside panels uses the darker ink
+  color (≈16:1 contrast) instead of gray. Applies to the hero intro + links,
+  focus areas, contact section, About lede, and every About section.
+

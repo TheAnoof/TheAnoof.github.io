@@ -33,7 +33,7 @@ const rows = [
 ---
 
 <BaseLayout title={data.title} description={data.lede}>
-  <PageHeader eyebrow={profile.headline} title={data.title} lede={data.lede}>
+  <PageHeader eyebrow={profile.headline} title={data.title} lede={data.lede} boxedLede>
     <div class="about__actions rise" style="--i: 3">
       <ButtonLink href={url('/resume/')} variant="secondary" icon="arrow-right">View resume</ButtonLink>
       <ButtonLink href={url('/projects/')} variant="quiet" icon="arrow-right">See projects</ButtonLink>
@@ -43,8 +43,8 @@ const rows = [
         image={profile.photo}
         alt={profile.photoAlt}
         aspect="4 / 5"
-        sizes="15rem"
-        widths={[240, 480, 720]}
+        sizes="(min-width: 52rem) 19rem, 6.5rem"
+        widths={[208, 304, 608, 912]}
         marks
         placeholderLabel="Photo placeholder"
       />
@@ -61,7 +61,7 @@ const rows = [
           </h2>
           <div class="about__row-body">
             {row.key === 'background' && (
-              <div class="prose">
+              <div class="panel prose about__bio">
                 <Content />
               </div>
             )}
@@ -69,7 +69,7 @@ const rows = [
             {row.key === 'focus' && <FocusAreas areas={profile.focusAreas} projects={projects} layout="stacked" />}
 
             {row.key === 'interests' && (
-              <ul class="about__interests" role="list">
+              <ul class="panel about__interests" role="list">
                 {data.interests.map((item) => (
                   <li>{item}</li>
                 ))}
@@ -79,7 +79,7 @@ const rows = [
             {row.key === 'highlights' && (
               <ol class="highlights" role="list">
                 {data.highlights.map((h) => (
-                  <li class="highlight">
+                  <li class="panel highlight">
                     <div class="highlight__head">
                       <h3 class="highlight__title">
                         {h.link ? <a href={h.link}>{h.title}</a> : h.title}
@@ -94,7 +94,7 @@ const rows = [
             )}
 
             {row.key === 'skills' && (
-              <dl class="skills">
+              <dl class="panel skills">
                 {data.skills.map((group) => (
                   <div class="skills__row">
                     <dt class="skills__group">{group.group}</dt>
@@ -106,7 +106,7 @@ const rows = [
               </dl>
             )}
 
-            {row.key === 'current' && <p class="about__current">{data.currentFocus}</p>}
+            {row.key === 'current' && <p class="panel about__current">{data.currentFocus}</p>}
           </div>
         </section>
       ))
@@ -127,9 +127,19 @@ const rows = [
     padding: 8px;
   }
 
+  /* Desktop: the photo fills the full height of the header text column, so
+     its top lines up with the "About" title and its bottom with the buttons.
+     (The crop marks sit just outside the photo edges.) */
   @media (min-width: 52rem) {
     .about__portrait {
-      width: 15rem;
+      width: 19rem;
+      padding: 0;
+    }
+
+    .about__portrait :global(.frame) {
+      aspect-ratio: auto;
+      height: 100%;
+      min-height: 20rem;
     }
   }
 
@@ -170,18 +180,13 @@ const rows = [
     min-width: 0;
   }
 
-  .about__row-body :global(.focus__main) {
-    border-top: 0;
-  }
-
-  .about__row-body :global(.focus__item:first-child) {
-    padding-top: 0;
+  .about__bio {
+    max-width: none;
   }
 
   .about__interests {
     display: grid;
     gap: var(--space-3);
-    max-width: var(--measure);
   }
 
   .about__interests li {
@@ -201,18 +206,12 @@ const rows = [
 
   .highlights {
     display: grid;
-    gap: var(--space-5);
+    gap: var(--space-4);
   }
 
   .highlight {
     display: grid;
     gap: var(--space-1);
-    max-width: var(--measure);
-  }
-
-  .highlight + .highlight {
-    padding-top: var(--space-5);
-    border-top: 1px dashed var(--rule);
   }
 
   .highlight__head {
@@ -233,17 +232,30 @@ const rows = [
   }
 
   .highlight__summary {
-    color: var(--ink-2);
+    margin-top: var(--space-1);
+    color: var(--ink);
   }
 
   .skills {
     display: grid;
-    gap: var(--space-4);
   }
 
   .skills__row {
     display: grid;
     gap: var(--space-2);
+    padding-block: var(--space-4);
+  }
+
+  .skills__row:first-child {
+    padding-top: 0;
+  }
+
+  .skills__row:last-child {
+    padding-bottom: 0;
+  }
+
+  .skills__row + .skills__row {
+    border-top: 1px solid var(--rule);
   }
 
   @media (min-width: 40rem) {
@@ -259,7 +271,6 @@ const rows = [
   }
 
   .about__current {
-    max-width: var(--measure);
     font-size: var(--step-1);
   }
 </style>

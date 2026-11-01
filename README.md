@@ -97,36 +97,19 @@ structured parts of the page:
 | `objectives`, `outcomes` | "Project scope — Team" section (what the **team** did) |
 | `contributions` | "My contribution — Individual" section (what **you** did) |
 | `decisions` | "Key engineering decisions" — decision, rationale, result |
-| `skills`, `tools` | Side panel next to the technical write-up |
+| `skills`, `tools` | "Skills & tools" panel |
 | `gallery` | Numbered figures (Fig. 01, 02…) at the bottom |
-| Text below the second `---` | The technical write-up (Markdown) |
 | `order` | Position on the Projects page (1 = first) |
-| `draft: true` | Hides the project from the live site |
+| `draft: true` | Hides the project everywhere — live site and local preview |
 | `areas` | Which focus areas on the homepage list this project as evidence |
 
 Any optional section you delete or leave empty is hidden, and the section
-numbers adjust automatically.
+numbers adjust automatically. Anything written below the closing `---` line
+of a project file is ignored.
 
 **Writing tip:** keep `objectives`/`outcomes` about the team and
 `contributions`/`decisions` about you. Only use metrics you can explain in an
 interview.
-
-#### Formatting the technical write-up (Markdown)
-
-```markdown
-## Section heading
-
-A normal paragraph. **Bold**, *italic*, and a [link](https://example.com).
-
-- A bullet point
-- Another bullet point
-
-![What the image shows](./images/fea-results.png)
-
-| Load case | Max stress | Safety factor |
-|-----------|-----------:|--------------:|
-| Cornering | 210 MPa    | 1.9           |
-```
 
 ### Project images → `content/projects/<project>/images/`
 
@@ -147,6 +130,10 @@ A normal paragraph. **Bold**, *italic*, and a [link](https://example.com).
 and specific. Use lowercase file names without spaces (`fea-results.png`, not
 `FEA Results.PNG`).
 
+Every image gets a thin dark-blue border. To change its color or thickness,
+edit `--image-border-color` and `--image-border-width` near the top of
+`src/styles/tokens.css`.
+
 ### Resume → `public/resume/`
 
 Replace `public/resume/Anav-Saxena-Resume.pdf` with your real resume, **using
@@ -163,7 +150,8 @@ the same file name**. (Or use a different name and update `resume.file` in
 4. Add images to its `images/` folder.
 
 That's it — the card, page, homepage listing and focus-area links are created
-automatically. To remove a project, delete its folder (or set `draft: true`).
+automatically. To hide a project without deleting it, set `draft: true`; to
+remove it permanently, delete its folder.
 
 ### Changing the navigation
 
@@ -192,8 +180,8 @@ npm run dev
 Open **http://localhost:4321** in your browser. The page refreshes automatically
 every time you save a file. Press `Ctrl + C` in the terminal to stop it.
 
-Projects marked `draft: true` are visible in this preview but hidden on the
-live site.
+Projects marked `draft: true` are hidden here too, so the preview always
+matches the live site.
 
 ### Checking everything before publishing
 
