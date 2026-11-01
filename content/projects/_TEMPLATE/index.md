@@ -8,8 +8,8 @@
 #         content/projects/fsae-suspension/  →  /projects/fsae-suspension/
 #     (Folders starting with "_" are ignored, which is why this one is hidden.)
 #  2. Put the project's images in the new folder's `images/` subfolder.
-#  3. Fill in the fields below, then write the technical write-up underneath
-#     the second "---" line.
+#  3. Fill in the fields below. (Anything written below the closing "---"
+#     line is not shown on the site.)
 #  4. Preview with `npm run dev`. The project automatically appears on the
 #     Projects page, on the homepage, and under matching focus areas.
 #
@@ -32,7 +32,7 @@ timeline: "[Start – End placeholder]"           # e.g. Sep 2025 – Present
 team: "[Team size placeholder]"                 # optional, e.g. 4-person subteam
 status: "[Status placeholder]"                  # optional, e.g. Completed, In progress
 order: 99            # position on the Projects page — 1 shows first
-draft: true          # true = hidden from the live site; set to false to publish
+draft: true          # true = hidden everywhere (live site + preview); false = shown
 
 # Which focus areas (ids from content/profile.yaml) this project is evidence for.
 areas: [design]
@@ -97,21 +97,3 @@ tools: ["[Software or tool placeholder]", "[Software or tool placeholder]"]
 #     alt: "..."
 #     caption: "..."
 ---
-
-## [Technical section heading placeholder]
-
-[Technical details placeholder — this is where an engineer reading closely finds the depth. Use sections like Requirements, Design approach, Analysis, Manufacturing, Testing and Lessons learned.]
-
-## [Technical section heading placeholder]
-
-[Technical details placeholder.]
-
-<!--
-  Markdown cheat-sheet for this section:
-    ## Heading            → section heading
-    **bold**  *italic*    → emphasis
-    - item                → bullet list
-    [text](https://...)   → link
-    ![Alt text](./images/figure.png)   → an image from this project's folder
-    | A | B |             → a table (see README for an example)
--->

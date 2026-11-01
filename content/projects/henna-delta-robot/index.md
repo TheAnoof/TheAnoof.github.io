@@ -15,13 +15,13 @@ category: "Personal project"
 timeline: "[Start – End placeholder]"
 team: "[Team size placeholder]"
 status: "[Status placeholder]"
-order: 2
-draft: false
+order: 5
+draft: true
 
 # Focus areas this project is evidence for (ids from content/profile.yaml).
 # TODO: confirm these — they were filled in as a best guess.
 areas: [robotics, design]
-tags: ["Delta robot", "Personal project", "[Tag placeholder]"]
+tags: ["Personal project", "Robotics", "CAD", "Electronics Integration"]
 
 # --- Images (remove the "#" once the file is in images/) ---------------------
 # cover: ./images/cover.jpg
@@ -69,15 +69,3 @@ tools: ["[Software or tool placeholder]", "[Software or tool placeholder]"]
 #     alt: "Describe what the image shows"
 #     caption: "Short caption shown under the image"
 ---
-
-## [Technical section heading placeholder]
-
-[Technical details placeholder — requirements and constraints.]
-
-## [Technical section heading placeholder]
-
-[Technical details placeholder — design approach, analysis, and key trade-offs.]
-
-## [Technical section heading placeholder]
-
-[Technical details placeholder — manufacturing, testing, and lessons learned.]

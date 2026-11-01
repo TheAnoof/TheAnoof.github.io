@@ -23,30 +23,30 @@ name: Anav Saxena
 headline: Mechanical Engineering Student
 
 # Small label above your name on the homepage (school, program, year...).
-eyebrow: "[University · Mechanical Engineering · Class of 20XX placeholder]"
+eyebrow: "UCLA | Mechanical Engineering | Class of 2029"
 
 # One line on what you do. Keep it under ~110 characters.
-tagline: "[Professional tagline placeholder — one sentence on the mechanical systems you design, build, and test]"
+tagline: "Designing, analyzing, building, and testing everything from cars to robots"
 
 # Two or three sentences max. The homepage should NOT be a biography.
-intro: "[Short introduction placeholder — two or three sentences on who you are, what you are studying, and the kind of engineering work you are looking for.]"
+intro: "Mechanical engineering student owning design of mechanical and robotic systems. Seeking Summer 2027 roles in mechanical design, robotics, manufacturing, or testing."
 
 # Optional — delete the line or leave it empty if you don't want it shown.
-location: "[City, State placeholder]"
-availability: "[Availability placeholder — e.g. Seeking Summer 20XX mechanical design internships]"
+location: "Cupertino/Los Angeles, CA"
+#availability: "Seeking Summer 2027 mechanical design, robotics, or manufacturing internships"
 
 # --- Photo -------------------------------------------------------------------
 # 1. Put your photo in:  content/images/
 #    (a JPG or PNG, roughly square or 4:5 portrait, at least 800 px wide)
 # 2. Remove the "#" at the start of the next two lines and fix the filename.
 #    Until then, a neutral placeholder frame is shown.
-# photo: ./images/headshot.jpg
+photo: ./images/WebsitePhoto.JPG
 # photoAlt: Portrait of Anav Saxena
 
 # --- Contact & links ---------------------------------------------------------
 # These are public on the website. Use full addresses starting with https://
-email: your.email@example.com # TODO: replace with your professional email
-linkedin: https://www.linkedin.com/in/your-profile # TODO: replace with your LinkedIn URL
+email: anavsaxena.21@gmail.com # TODO: replace with your professional email
+linkedin: https://www.linkedin.com/in/anav-saxena # TODO: replace with your LinkedIn URL
 github: https://github.com/TheAnoof # TODO: confirm, or delete this line to hide GitHub
 
 # --- Resume ------------------------------------------------------------------
@@ -54,9 +54,9 @@ github: https://github.com/TheAnoof # TODO: confirm, or delete this line to hide
 # `file` must match the PDF's filename exactly (capital letters matter).
 # `downloadName` is the filename recruiters get when they click Download.
 resume:
-  file: /resume/Anav-Saxena-Resume.pdf
-  downloadName: Anav-Saxena-Resume.pdf
-  updated: "[Month YYYY placeholder]"
+  file: /resume/Anav_Saxena_UCLAMechanical.pdf
+  downloadName: Anav_Saxena_UCLAMechanical.pdf
+  updated: "October 2026"
 
 # --- Navigation --------------------------------------------------------------
 # The links in the top bar, in order. Your name (top-left) always links home.
@@ -82,28 +82,28 @@ focusAreas:
     title: Mechanical design
     emphasis: primary
     label: Primary focus
-    description: "[Mechanical design focus placeholder — one sentence on the design work you do, e.g. CAD, analysis, tolerancing]"
+    description: "Design, analyze, and build mechanical systems (SOLIDWORKS, Onshape, Ansys) to fit performance, cost, DFMA, and serviceability requirements."
   - id: robotics
     title: Robotics
     emphasis: secondary
     label: Growing focus
-    description: "[Robotics focus placeholder — one sentence on your robotics interests and experience]"
+    description: "Work on personal projects in robotics building off of 4+ years in FIRST, wanting to dive deeper into human-robot interaction systems."
   - id: manufacturing
     title: Manufacturing
     emphasis: secondary
-    description: "[Manufacturing focus placeholder — one sentence on the fabrication processes you have used]"
+    description: "Leverage experience in manual and CNC machine operation to design parts for precision manufacturing using available tools."
   - id: test
     title: Test & validation
     emphasis: supporting
 
 # --- Projects page -----------------------------------------------------------
 # Short line under the "Projects" heading on the Projects page.
-projectsIntro: "[Projects page intro placeholder — one sentence framing the work below]"
+projectsIntro: "A mix of past and ongoing work in various engineering teams and personal projects!"
 
 # --- Contact section (bottom of homepage) --------------------------------------
 contact:
-  heading: Get in touch
-  message: "[Contact message placeholder — e.g. I'm looking for mechanical design and robotics internships. The fastest way to reach me is email.]"
+  heading: Get in touch!
+  message: "Currently seeking summer 2027 internships. Always down for talking about robotics, machining, or teaching. Connect with me via email or on LinkedIn!"
 
 # --- Search engines & link previews -----------------------------------------
 # Used for the browser-tab title and the preview card when the link is shared.
