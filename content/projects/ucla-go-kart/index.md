@@ -24,11 +24,11 @@
 
 # --- Card + page header ------------------------------------------------------
 title: "Go-Kart"
-subtitle: "Ten-week design–build–race of an electric go-kart"
+subtitle: "Ten-week design-build-race cycle of an electric go-kart"
 role: "Design Engineer"
 organization: "UCLA - ENGR 1GK"
 category: "UCLA ENGR 1GK"
-timeline: "Mar 2026 – Jun 2026"
+timeline: "Mar 2026 - Jun 2026"
 team: "5"
 status: "Successfully ran at end of quarter"
 order: 2
@@ -48,8 +48,8 @@ cover: ./images/GK_Full.JPG
 coverAlt: "Fully assembled go-kart during final testing"
 coverCaption: "Fully assembled go-kart during final testing"
 
-# --- At a glance (the top of the page — what a recruiter reads) ---------------
-summary: "Ten-week project to design, build, and race an electric go-kart driven by scooter hub motors. Our kart set the fastest best lap of the four teams and completed roughly a dozen runs, while most teams completed one to three."
+# --- At a glance (the top of the page - what a recruiter reads) ---------------
+summary: "Ten-week project to design, build, and race an electric go-kart driven by scooter hub motors. Our team's kart set the fastest best lap time of the four teams and completed roughly a dozen runs, while most teams completed roughly 2 to 5 runs."
 
 # Key numbers. Keep `value` short (e.g. "18%", "3.2 kg", "40+") and only
 # use numbers you can defend in an interview.
@@ -65,19 +65,19 @@ metrics:
 # What the PROJECT / TEAM set out to do.
 objectives:
   - "Fully design, manufacture, and test an electric go-kart, including the chassis, basic suspension, steering, electronics enclosure, brakes, and driver integration"
-  - "Design vehicle to meet chassis strength and braking standards to ensure driver safety"
+  - "Plan vehicle to meet chassis strength and braking standards to ensure driver safety"
 
 # What the PROJECT / TEAM achieved.
 outcomes:
   - "Designed, built, and raced a fully functioning electric go-kart that set the fastest best lap of the four teams on a controlled track"
-  - "Completed roughly a dozen runs, while most teams completed one to three"
+  - "Created robust go-kart built for back-to-back races, allowing us to complete a dozen runs without mechanical failure"
   - "Presented designs at preliminary and final design reviews, applying feedback to improve safety and system integration"
 
 # What YOU personally did. Start each line with a verb (Designed, Machined...).
 contributions:
-  - "Designed (SOLIDWORKS) and assembled the go-kart chassis from 80/20 aluminum extrusions and aluminum gussets"
-  - "Maximized chassis stiffness by adding two full-length extrusions along the chassis to minimize flex"
-  - "Modified gusset designs to combine three parts into one and integrate the chassis and steering systems"
+  - "Designed (SOLIDWORKS) and assembled the go-kart chassis from 80/20 aluminum extrusions and plasma cut aluminum gussets"
+  - "Maximized chassis stiffness by adding two full-length extrusions along the chassis to minimize flexing"
+  - "Modified gusset designs to combine three parts into one and integrate the chassis and steering systems while maintaining manufacturability via plasma cutter"
 
 # Engineering decisions YOU made, and why. `result` is optional.
 # decisions:
@@ -93,8 +93,8 @@ tools: ["SOLIDWORKS"]
 # Put an .mp4 file in this project's images/ folder, then remove the "#" from
 # the two lines below and fix the filename. (iPhone .MOV files must be exported
 # as .mp4 first; keep clips short — under ~20 MB.)
-# video: ./images/GK_Race.mp4
-# videoCaption: "Go-kart run on the controlled track"
+video: ./images/GK_Race.mp4
+videoCaption: "Me driving our go-kart around the track (not representative of top speed; I am a slow driver)"
 
 # --- Gallery (CAD, drawings, test photos, diagrams) ----------------------------
 # `section` groups figures into short chapters on the page.
