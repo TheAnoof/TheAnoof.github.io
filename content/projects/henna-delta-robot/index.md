@@ -9,8 +9,8 @@
 # --- Card + page header ------------------------------------------------------
 title: "Delta-Style Robotic Henna Applicator"
 subtitle: "Coming Soon!!!"
-#role: "[Your role placeholder]"
-#organization: "Personal project"
+role: "Design Engineer"
+organization: "Personal Project"
 category: "Personal project"
 timeline: "June 2026 - Present"
 #team: "[Team size placeholder]"
@@ -29,7 +29,7 @@ coverAlt: "In progress assembly of delta-style applicator device, featuring moti
 # coverCaption: "In progress assembly of delta-style applicator device, featuring motion frame and beginning of electronics integration."
 
 # --- At a glance -------------------------------------------------------------
-#summary: "[High-level project summary placeholder — two or three sentences: what the project is, why it mattered, and the headline result.]"
+summary: "The goal of this project is to make an automated henna dispensing system to help people create intricate designs when they cannot themselves. Based on an delta-style FDM 3D printer layout, the system replaces a hot-end with a custom henna extruder. Development involves constructing a custom frame for a human hand, integrating motion control electronics, and utilizing a 3D mapping system to account for hand contours to ensure a safe operating margin."
 
 #metrics:
 #  - value: "[#]"
