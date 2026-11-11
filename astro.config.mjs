@@ -28,6 +28,19 @@ export default defineConfig({
       fallbacks: ['system-ui', 'sans-serif'],
     },
     {
+      // Used only by the PDF portfolio page. These are fixed-weight font files
+      // (the site's own copy above is a single "variable" file); a PDF can
+      // embed fixed weights as real fonts, which print and display more
+      // crisply. Website visitors never download these.
+      provider: fontProviders.fontsource(),
+      name: 'IBM Plex Sans',
+      cssVariable: '--font-pdf-sans',
+      weights: [400, 500, 600],
+      styles: ['normal'],
+      subsets: ['latin'],
+      fallbacks: ['system-ui', 'sans-serif'],
+    },
+    {
       provider: fontProviders.fontsource(),
       name: 'IBM Plex Mono',
       cssVariable: '--font-mono',

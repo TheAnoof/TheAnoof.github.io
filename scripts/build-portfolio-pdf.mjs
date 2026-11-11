@@ -305,24 +305,24 @@ async function savePreviews(doc, folder) {
     .toFile(join(folder, 'all-pages.jpg'));
 }
 
-/** Removes the print page, and any image made only for it, from dist/. */
+/** Removes the print page, and any image or font file made only for it, from dist/. */
 function removePrintPage(assetPaths) {
   rmSync(join(dist, ROUTE), { recursive: true, force: true });
-  const htmlFiles = [];
+  const pages = []; // every remaining page and stylesheet
   const walk = (dir) => {
     for (const name of readdirSync(dir)) {
       const full = join(dir, name);
       if (statSync(full).isDirectory()) walk(full);
-      else if (name.endsWith('.html')) htmlFiles.push(readFileSync(full, 'utf8'));
+      else if (/\.(html|css)$/.test(name)) pages.push(readFileSync(full, 'utf8'));
     }
   };
   walk(dist);
   let removed = 0;
-  for (const path of assetPaths) {
+  for (const path of new Set(assetPaths)) {
     const file = normalize(join(dist, path));
     const name = file.split(sep).pop();
     if (!file.startsWith(dist + sep) || !existsSync(file)) continue;
-    if (htmlFiles.some((html) => html.includes(name))) continue; // a real page uses it too
+    if (pages.some((text) => text.includes(name))) continue; // the website uses it too
     rmSync(file);
     removed++;
   }
@@ -371,7 +371,14 @@ async function main() {
     const { layout, manifest, assets } = await page.evaluate(() => ({
       layout: window.__PORTFOLIO_PDF__,
       manifest: JSON.parse(document.getElementById('pdf-manifest').textContent),
-      assets: [...document.images].map((img) => new URL(img.currentSrc || img.src).pathname),
+      // Images and font files this page loaded (removed afterwards if no real page uses them).
+      assets: [
+        ...[...document.images].map((img) => new URL(img.currentSrc || img.src).pathname),
+        ...performance
+          .getEntriesByType('resource')
+          .map((entry) => new URL(entry.name).pathname)
+          .filter((path) => /\.(woff2?|ttf|otf)$/.test(path)),
+      ],
     }));
 
     if (trouble.length) stop('the print page did not load cleanly.', trouble);
@@ -443,7 +450,7 @@ async function main() {
       `\n    Checked: ${manifest.pages.reduce((n, p) => n + p.expect.length, 0)} pieces of source text match exactly; ` +
         `${manifest.pages.reduce((n, p) => n + p.forbid.length, 0)} website-only phrases are absent.`,
     );
-    if (!flags.has('--keep-page')) console.log(`    Print page removed from dist/ (${removed} PDF-only image file(s) with it).`);
+    if (!flags.has('--keep-page')) console.log(`    Print page removed from dist/ (${removed} PDF-only image and font file(s) with it).`);
     if (flags.has('--preview')) console.log(`    Page previews saved to pdf-preview/ (all-pages.jpg shows every page).`);
     for (const warning of warnings) console.log(`\n    ⚠ ${warning}`);
     console.log('');
