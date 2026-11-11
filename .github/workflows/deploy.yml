@@ -2,7 +2,8 @@
 #
 # - Every push to `main` deploys the live site (https://theanoof.github.io).
 # - Pull requests and pushes to other branches only run the checks
-#   (type check, build, broken-link check) — nothing is published.
+#   (type check, build incl. the PDF portfolio, broken-link check) — nothing
+#   is published.
 # - "Run workflow" on the Actions tab re-deploys manually.
 #
 # Based on the official Astro guide: https://docs.astro.build/en/guides/deploy/github/
@@ -40,7 +41,9 @@ jobs:
         uses: withastro/action@v6
         with:
           node-version: 24
-          build-cmd: npm run verify
+          # The build also makes the PDF portfolio, which needs a headless
+          # Chromium (installed here; nothing is sent to any outside service).
+          build-cmd: npx playwright install --with-deps --only-shell chromium && npm run verify
 
   deploy:
     name: Deploy
