@@ -17,6 +17,9 @@ team: "3"
 status: "Successfully tested robot at end of quarter"
 order: 4
 draft: false
+# PDF portfolio: true = this project gets a page in the downloadable PDF.
+# (Only changes the PDF — the project stays on the website either way.)
+includeInPdf: true
 
 # Focus areas this project is evidence for (ids from content/profile.yaml).
 areas: [robotics]
@@ -73,20 +76,27 @@ tools: ["SOLIDWORKS"]
 
 # --- Gallery -----------------------------------------------------------------
 # `section` groups figures into short chapters on the page.
+# `includeInPdf: true` puts that image on this project's PDF page too (2–6 per
+# project reads best). Optional `pdfSize: large` or `small` gives an image more
+# or less room on the PDF page. Neither changes the website.
 gallery:
   - src: ./images/UW_Launcher.png
+    includeInPdf: true
     section: "Design"
     alt: "SOLIDWORKS assembly of pneumatic launcher integration onto PVC chassis."
     caption: "SOLIDWORKS assembly of pneumatic launcher integration onto PVC chassis."
   - src: ./images/UW_Tether_Mount.png
+    includeInPdf: true
     section: "Design"
     alt: "SOLIDWORKS CAD of tether mount, implementing strain relief into mechanical integration of tether onto chassis."
     caption: "SOLIDWORKS CAD of tether mount, implementing strain relief into mechanical integration of tether onto chassis."
   - src: ./images/UW_Full_Robot.png
+    includeInPdf: true
     section: "Build & test"
     alt: "Fully assembled underwater robot, featuring 8 motors for 6-DoF motion and pneumatic launcher."
     caption: "Fully assembled underwater robot, featuring 8 motors for 6-DoF motion and pneumatic launcher."
   - src: ./images/UW_Robot_Shooting.png
+    includeInPdf: true
     section: "Build & test"
     alt: "Frame from a test video: the pneumatic launcher firing underwater."
     caption: "Frame from a test video: the pneumatic launcher firing underwater."

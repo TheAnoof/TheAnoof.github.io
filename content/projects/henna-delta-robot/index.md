@@ -17,6 +17,9 @@ timeline: "June 2026 - Present"
 status: "Design In Progress"
 order: 5
 draft: false
+# PDF portfolio: true = this project gets a page in the downloadable PDF.
+# (Only changes the PDF — the project stays on the website either way.)
+includeInPdf: false
 
 # Focus areas this project is evidence for (ids from content/profile.yaml).
 # TODO: confirm these — they were filled in as a best guess.

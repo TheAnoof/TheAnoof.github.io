@@ -33,6 +33,7 @@ team: "[Team size placeholder]"                 # optional, e.g. 4-person subtea
 status: "[Status placeholder]"                  # optional, e.g. Completed, In progress
 order: 99            # position on the Projects page — 1 shows first
 draft: true          # true = hidden everywhere (live site + preview); false = shown
+includeInPdf: false  # true = this project also gets a page in the downloadable PDF portfolio
 
 # Which focus areas (ids from content/profile.yaml) this project is evidence for.
 areas: [design]
@@ -98,12 +99,17 @@ tools: ["[Software or tool placeholder]", "[Software or tool placeholder]"]
 # `section` (optional) groups figures into chapters such as "Design",
 # "Analysis", "Manufacturing", "Testing". Wide images (diagrams, spreadsheets)
 # automatically span the full width.
+# `includeInPdf: true` also puts that image on this project's page in the PDF
+# portfolio (2–6 per project reads best; it needs a `caption`). Optional
+# `pdfSize: large` or `small` gives it more or less room on the PDF page.
 # gallery:
 #   - src: ./images/cad-assembly.png
+#     includeInPdf: true
 #     section: "Design"
 #     alt: "Describe what the image shows, for screen readers"
 #     caption: "Explain what the viewer is looking at, not just the part name"
 #   - src: ./images/test-setup.jpg
+#     includeInPdf: false
 #     section: "Testing"
 #     alt: "..."
 #     caption: "..."

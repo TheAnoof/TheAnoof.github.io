@@ -16,6 +16,9 @@ timeline: "Sept 2025 - Present"
 status: "FEA in progress, awaiting finalization before manufacturing"
 order: 1
 draft: false
+# PDF portfolio: true = this project gets a page in the downloadable PDF.
+# (Only changes the PDF — the project stays on the website either way.)
+includeInPdf: true
 
 # Focus areas this project is evidence for (ids from content/profile.yaml).
 areas: [design, manufacturing]
@@ -70,48 +73,62 @@ tools: ["SOLIDWORKS", "Ansys Mechanical"]
 
 # --- Gallery -----------------------------------------------------------------
 # `section` groups figures into short chapters on the page.
+# `includeInPdf: true` puts that image on this project's PDF page too (2–6 per
+# project reads best). Optional `pdfSize: large` or `small` gives an image more
+# or less room on the PDF page. Neither changes the website.
 gallery:
   - src: ./images/WH_Front_Assembly.png
+    includeInPdf: true
     section: "Design"
     alt: "SOLIDWORKS assembly of front left wheel"
     caption: "SOLIDWORKS assembly of front left wheel"
   - src: ./images/WH_Rear_Assembly.png
+    includeInPdf: true
     section: "Design"
     alt: "SOLIDWORKS assembly of rear left wheel"
     caption: "SOLIDWORKS assembly of rear left wheel"
   - src: ./images/WH_Camber_Trade_Study.png
+    includeInPdf: false
     section: "Design"
     alt: "Trade study scores deciding between different camber adjustment methods"
     caption: "Trade study scores deciding between different camber adjustment methods"
   - src: ./images/WH_FBD.png
+    includeInPdf: true
     section: "Analysis"
     alt: "Free body diagram showing lateral and longitudinal force analysis to derive bearing loads"
     caption: "Free body diagram showing lateral and longitudinal force analysis to derive bearing loads"
   - src: ./images/WH_Bearing_Calcs.png
+    includeInPdf: false
     section: "Analysis"
     alt: "Updated spreadsheet reflecting new bearing load calculations to derive SKF bearing rating based on loads and expected life"
     caption: "Updated spreadsheet reflecting new bearing load calculations to derive SKF bearing rating based on loads and expected life"
   - src: ./images/WH_FHub_FEA_3.png
+    includeInPdf: true
     section: "Analysis"
     alt: "Front wheel hub structural analysis setup under combined cornering and braking load"
     caption: "Front wheel hub structural analysis setup under combined cornering and braking load"
   - src: ./images/WH_FHub_FEA_1.png
+    includeInPdf: true
     section: "Analysis"
     alt: "Front wheel hub structural analysis results, showing max stress at rotor interface"
     caption: "Front wheel hub structural analysis results, showing max stress at rotor interface"
   - src: ./images/WH_FHub_FEA_2.png
+    includeInPdf: false
     section: "Analysis"
     alt: "Front wheel hub structural analysis mesh refinement at max stress region. Stress converged under 5% variation upon refinement"
     caption: "Front wheel hub structural analysis mesh refinement at max stress region. Stress converged under 5% variation upon refinement"
   - src: ./images/WH_Dyno_CAM.png
+    includeInPdf: false
     section: "Manufacturing"
     alt: "CAM created in Fusion 360 to machine dynamometer adapter to attach to wheel hub and dynamometer interface"
     caption: "CAM created in Fusion 360 to machine dynamometer adapter to attach to wheel hub and dynamometer interface"
   - src: ./images/WH_Dyno_Machining.jpeg
+    includeInPdf: false
     section: "Manufacturing"
     alt: "Machining process for aluminum 7075-T6 dynamometer adapters on a Haas CNC mini mill"
     caption: "Machining process for aluminum 7075-T6 dynamometer adapters on a Haas CNC mini mill"
   - src: ./images/WH_Dyno_Final.jpeg
+    includeInPdf: true
     section: "Manufacturing"
     alt: "Finished dynamometer adapters featuring center bore to fit wheel hub, counterbores for fastening to driving pegs, and through holes to fasten to dynamometer"
     caption: "Finished dynamometer adapters featuring center bore to fit wheel hub, counterbores for fastening to driving pegs, and through holes to fasten to dynamometer"
