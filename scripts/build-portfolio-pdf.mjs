@@ -424,6 +424,9 @@ async function main() {
     console.log(`    ${pdfCheck.pages} pages · US Letter ${manifest.page.widthIn} × ${manifest.page.heightIn} in · ${(bytes.length / 1048576).toFixed(2)} MB`);
     for (const sheet of layout.sheets) {
       console.log(`\n    ${sheet.title} — ${sheet.images.length} image(s), ${sheet.imageShare}% of the page`);
+      if (sheet.images.length > 6) {
+        warnings.push(`${sheet.title}: ${sheet.images.length} images share one page, so each is small. 2–6 reads best.`);
+      }
       for (const image of sheet.images) {
         const soft = image.sourceDpi < SOFT_DPI;
         if (soft) warnings.push(`${sheet.title}: ${image.file} prints at only ${image.sourceDpi} dpi and will look soft. A larger original would fix it.`);

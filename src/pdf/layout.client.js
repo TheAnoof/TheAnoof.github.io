@@ -211,6 +211,8 @@
         const width = heightOf(tree, W) <= H ? W : largest(W * 0.2, W, (w) => heightOf(tree, w) <= H);
         const drawn = [];
         const height = place(tree, 0, 0, width, drawn);
+        // A single image that could not fill the width sits in the middle.
+        if (isLeaf(tree)) drawn[0].x = (width - drawn[0].w) / 2;
         if (height > H + 0.5) continue;
         if (drawn.some((d) => Math.min(d.w, d.h) < MIN_SIDE)) continue;
         // Score the arrangement by a "fair average" of the image areas (each
