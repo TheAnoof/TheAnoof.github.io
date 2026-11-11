@@ -1,5 +1,6 @@
 ---
 /** Contact section: a short message and a spec-table of ways to reach out. */
+import { pdfFileName, pdfHref } from '../lib/portfolioPdf';
 import { getProfile, resumeHref } from '../lib/site';
 import Icon, { type IconName } from './Icon.astro';
 import SectionHeader from './SectionHeader.astro';
@@ -30,6 +31,14 @@ rows.push({
   href: resumeHref(profile),
   icon: 'download',
   download: profile.resume.downloadName,
+});
+// The PDF version of this portfolio, generated from the same content at build time.
+rows.push({
+  label: 'Portfolio',
+  value: 'Download this portfolio',
+  href: pdfHref(profile),
+  icon: 'download',
+  download: pdfFileName(profile),
 });
 ---
 

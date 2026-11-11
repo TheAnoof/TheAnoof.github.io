@@ -11,6 +11,7 @@ import MediaFrame from '../components/MediaFrame.astro';
 import ProjectGrid from '../components/ProjectGrid.astro';
 import SectionHeader from '../components/SectionHeader.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pdfFileName, pdfHref } from '../lib/portfolioPdf';
 import { getProfile, getProjects, resumeHref, url } from '../lib/site';
 
 const profile = await getProfile();
@@ -74,6 +75,15 @@ const projects = await getProjects();
             iconPosition="start"
           >
             Download resume
+          </ButtonLink>
+          <ButtonLink
+            href={pdfHref(profile)}
+            download={pdfFileName(profile)}
+            variant="secondary"
+            icon="download"
+            iconPosition="start"
+          >
+            Download this portfolio
           </ButtonLink>
         </div>
       </div>
