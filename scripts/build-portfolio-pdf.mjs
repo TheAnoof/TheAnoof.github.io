@@ -261,10 +261,15 @@ async function inspectPdf(bytes, manifest) {
     }
   });
 
-  // Contact links on the cover stay clickable.
+  // Links on the cover stay clickable — each one as many times as it appears.
   const clean = (address) => address.replace(/\/$/, '');
-  for (const href of manifest.links) {
-    if (!(links[0] ?? []).some((url) => clean(url) === clean(href))) problems.push(`The cover link ${href} is not clickable in the PDF.`);
+  const clickable = (links[0] ?? []).map(clean);
+  for (const href of new Set(manifest.links.map(clean))) {
+    const wanted = manifest.links.filter((link) => clean(link) === href).length;
+    const found = clickable.filter((url) => url === href).length;
+    if (found < wanted) {
+      problems.push(`The cover should have ${wanted} clickable link(s) to ${href}; the PDF has ${found}.`);
+    }
   }
 
   return { problems, pages: doc.numPages, doc };

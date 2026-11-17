@@ -70,6 +70,8 @@ const labels = {
   skills: 'Engineering skills',
   tools: 'Tools & software',
   contents: 'Projects',
+  // Shown on the cover in front of the site address, which links to the live site.
+  website: 'For the full portfolio, visit',
 };
 const squash = (text: string) => text.normalize('NFKC').replace(/\s+/g, '');
 const expect = (field: string, text: string, source: string) => ({ field, text, source });
@@ -80,6 +82,7 @@ const coverExpect = [
   expect('Location', location, 'content/profile.yaml → location'),
   expect('About blurb', blurb, 'content/about.md → lede'),
   ...contacts.map((c) => expect('Contact', c.label, 'content/profile.yaml')),
+  ...(siteHref ? [expect('Website pointer', `${labels.website} ${strip(siteHref)}`, 'astro.config.mjs → site')] : []),
   ...sheets.flatMap((s) => [
     expect('Contents: project title', s.data.title, s.file),
     expect('Contents: role', s.data.role, s.file),
@@ -153,7 +156,7 @@ const manifest = {
   output: pdfPath(profile),
   fileName: pdfFileName(profile),
   page: { widthIn: 8.5, heightIn: 11 },
-  links: contacts.map((c) => c.href),
+  links: [...(siteHref ? [siteHref] : []), ...contacts.map((c) => c.href)],
   pages: [
     {
       kind: 'cover',
@@ -199,6 +202,13 @@ const manifest = {
         <h1 class="cover__name">{profile.name}</h1>
         <p class="cover__school">{schoolParts.map((part) => <span>{part}</span>)}</p>
         <p class="cover__location">{location}</p>
+        {
+          siteHref && (
+            <p class="cover__website">
+              {labels.website} <a href={siteHref}>{strip(siteHref)}</a>
+            </p>
+          )
+        }
       </header>
 
       <div class="cover__body">
@@ -417,6 +427,19 @@ const manifest = {
   .cover__location {
     margin-top: 0.05in;
     font-size: 10.5pt;
+  }
+
+  .cover__website {
+    margin-top: 0.05in;
+    font-size: 10.5pt;
+  }
+
+  /* Underlined so it reads as a link on screen and still prints cleanly. */
+  .cover__website a {
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-thickness: 0.5pt;
+    text-underline-offset: 0.03in;
   }
 
   /* Statement on the left, portrait on the right. The portrait takes whatever

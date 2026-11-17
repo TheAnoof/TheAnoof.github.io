@@ -233,7 +233,9 @@ How to use it: README → "PDF portfolio".
   document next to the resume. ⟲ if most projects ever have 6+ wide images.
 - **Cover:** name, school line (`eyebrow`), location, photo, the About `lede`,
   a contact line (email, LinkedIn, site), a short projects list, and a
-  "Engineering Design Portfolio" label. Project pages carry a small footer
+  "Engineering Design Portfolio" label. Under the location, a line reading
+  "For the full portfolio, visit theanoof.github.io" links to the live site
+  (added 2026-11-16; the address comes from `site` in `astro.config.mjs`). Project pages carry a small footer
   with the name and page number.
 - **Project page:** title → My role / Organization / Timeline → At a glance
   (`summary`) → images with their captions → Engineering skills and Tools &
