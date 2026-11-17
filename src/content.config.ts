@@ -137,6 +137,9 @@ const projects = defineCollection({
       status: z.string().optional(),
       order: z.number().default(99),
       draft: z.boolean().default(false),
+      // true = this project gets a page in the downloadable PDF portfolio.
+      // It never changes what the website shows.
+      includeInPdf: z.boolean().default(false),
       areas: z.array(z.string()).default([]),
       tags: z.array(z.string()).default([]),
 
@@ -183,6 +186,12 @@ const projects = defineCollection({
             // Optional chapter heading, e.g. "Design", "Analysis",
             // "Manufacturing". Figures with the same section are grouped.
             section: z.string().optional(),
+            // true = this image also appears on the project's PDF page.
+            includeInPdf: z.boolean().default(false),
+            // How much room the image gets on the PDF page relative to the
+            // others: "large" for detail that must be readable, "small" for
+            // supporting shots.
+            pdfSize: z.enum(['small', 'normal', 'large']).default('normal'),
           }),
         )
         .default([]),

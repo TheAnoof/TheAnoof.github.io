@@ -17,6 +17,9 @@ team: "3"
 status: "Rig complete; handed off for destructive testing"
 order: 3
 draft: false
+# PDF portfolio: true = this project gets a page in the downloadable PDF.
+# (Only changes the PDF — the project stays on the website either way.)
+includeInPdf: true
 
 # Focus areas this project is evidence for (ids from content/profile.yaml).
 areas: [test, design]
@@ -62,32 +65,46 @@ tools: ["SOLIDWORKS", "Fusion 360 CAM"]
 
 # --- Gallery -----------------------------------------------------------------
 # `section` groups figures into short chapters on the page.
+# `includeInPdf: true` puts that image on this project's PDF page too (2–6 per
+# project reads best). Optional `pdfSize: large` or `small` gives an image more
+# or less room on the PDF page. Neither changes the website.
 gallery:
   - src: ./images/Baja_Full_CAD.png
+    includeInPdf: true
     section: "Design & analysis"
     alt: "Full CAD assembly of testing rig, including car jack, lever arm, bearing housing/supports, and adjustable frame."
     caption: "Full CAD assembly of testing rig, including car jack, lever arm, bearing housing/supports, and adjustable frame."
   - src: ./images/Baja_Key_Stress.png
+    includeInPdf: true
+    pdfSize: large
     section: "Design & analysis"
     alt: "Hand calculated compressive and shear stresses on bearing inner and outer keys under expected loads, selecting 1045 carbon steel for material"
     caption: "Hand calculated compressive and shear stresses on bearing inner and outer keys under expected loads, selecting 1045 carbon steel for material"
   - src: ./images/Baja_Machining.png
+    includeInPdf: true
+    pdfSize: small
     section: "Manufacturing & assembly"
     alt: "CNC milling of the bearing housing on a Haas 3-axis CNC mill"
     caption: "CNC milling of the bearing housing on a Haas 3-axis CNC mill"
   - src: ./images/Baja_Stackup.png
+    includeInPdf: true
+    pdfSize: small
     section: "Manufacturing & assembly"
     alt: "Stock remaining after the first machining setup, with the bearing and key test-fitted"
     caption: "Stock remaining after the first machining setup, with the bearing and key test-fitted"
   - src: ./images/Baja_Housing.png
+    includeInPdf: false
     section: "Manufacturing & assembly"
     alt: "Complete bearing housing after parting from stock on manual lathe and adding chamfers."
     caption: "Complete bearing housing after parting from stock on manual lathe and adding chamfers."
   - src: ./images/Baja_Key.png
+    includeInPdf: false
     section: "Manufacturing & assembly"
     alt: "Finalized custom key machined from steel bar stock."
     caption: "Finalized custom key machined from steel bar stock."
   - src: ./images/Baja_Frame.png
+    includeInPdf: true
+    pdfSize: small
     section: "Manufacturing & assembly"
     alt: "Assembled frame featuring adjustable mounting locations for car jack to provide more range for simulated bearing loads."
     caption: "Assembled frame featuring adjustable mounting locations for car jack to provide more range for simulated bearing loads."

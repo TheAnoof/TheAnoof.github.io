@@ -220,3 +220,89 @@ Full audit and rationale: [`docs/reviews/STAGE-2-3-AUDIT.md`](reviews/STAGE-2-3-
 - Footer, breadcrumb and focus-area links have ≥ 24 px tap targets.
 - Consistency: en-dash date ranges, "Present", "6-DoF", "Fusion 360", "80/20",
   units ("1 lb", "±0.001 in", "0.392 g"), "dynamometer".
+
+
+## PDF portfolio (2026-11-10)
+
+A downloadable, print-ready PDF generated from the website's own content.
+How to use it: README → "PDF portfolio".
+
+**Confirmed with Anav**
+- **US Letter, portrait.** Mockups in both orientations used the real content;
+  portrait gave larger images on three of four project pages and reads as a
+  document next to the resume. ⟲ if most projects ever have 6+ wide images.
+- **Cover:** name, school line (`eyebrow`), location, photo, the About `lede`,
+  a contact line (email, LinkedIn, site), a short projects list, and a
+  "Engineering Design Portfolio" label. Under the location, a line reading
+  "For the full portfolio, visit theanoof.github.io" links to the live site
+  (added 2026-11-16; the address comes from `site` in `astro.config.mjs`). Project pages carry a small footer
+  with the name and page number.
+- **Project page:** title → My role / Organization / Timeline → At a glance
+  (`summary`) → images with their captions → Engineering skills and Tools &
+  software. Nothing else from the project (tags, status, metrics, objectives,
+  outcomes, contributions, decisions) and nothing from the About page or
+  resume.
+- **Selection:** `includeInPdf` on each project and each gallery image, both
+  defaulting to **false** so nothing enters the PDF by accident and a newly
+  added image cannot break a page's fit. Order follows the website. Initial
+  set: FSAE Wheels (6 images), Go-Kart (4), Destructive Testing Rig (5, with
+  the hand-calculation sheet `pdfSize: large` and the machining photos
+  `small`), Underwater Robot (4). Henna applicator left out until it has
+  gallery images and skills.
+- **Print-first styling:** white page, pure black text and rules (gray text
+  prints as a dot pattern), every element at least 0.4 in from the paper edge.
+
+**Architecture**
+- **Single source of truth.** `src/pages/portfolio-pdf.astro` reads the same
+  content collections as the site; there is no PDF copy to keep in sync. The
+  page also emits a *manifest* of every string it is meant to show and every
+  website-only string it must not, with the source file of each.
+- **Rendering:** `scripts/build-portfolio-pdf.mjs` (run by `npm run build`)
+  serves `dist/` locally, opens the print page in Playwright's headless
+  Chromium, and prints real text and embedded images — not screenshots. No
+  server, external service, or secret is involved.
+- **Not published:** after printing, the print page and the image/font files
+  made only for it are deleted from `dist/`. Only the PDF is deployed, at
+  `/downloads/<Name>-Engineering-Design-Portfolio.pdf` (name derived from
+  `profile.name`). The PDF is never committed.
+- **Image arrangement** (`src/pdf/layout.client.js`, inlined into the print
+  page only — the public site still ships zero JavaScript): enumerates every
+  ordered arrangement of the selected images as nested rows and columns, sizes
+  each one from the real aspect ratios and measured caption heights, and keeps
+  the arrangement with the best "fair average" image area (a power mean that
+  is pulled down sharply by any tiny image), weighted by `pdfSize`. Images are
+  never cropped or stretched, and a low-resolution image is not enlarged past
+  130 px per printed inch. Handles 1–8 images of any shape.
+- **Fonts:** the site's IBM Plex Sans is a variable font, which Chromium can
+  only embed in a PDF as outline shapes. The print page uses fixed-weight
+  files of the same typeface (`--font-pdf-sans` in `astro.config.mjs`), which
+  embed as real TrueType fonts.
+- **Image encoding:** each image is resized for its likely printed size
+  (≈250–300 px per inch) and encoded as PNG when it is a flat graphic, JPEG
+  when it is a photo (whichever is smaller at equal quality).
+
+**Validation (any failure stops the build; the previous site stays live)**
+- *Content* (at build): required fields present and not placeholders; an
+  included project has skills/tools and 1–8 captioned images.
+- *Page* (before printing): exact sheet size; nothing overflowing, clipped,
+  overlapping, or outside the printable area; images loaded and undistorted;
+  text pure black and no smaller than 9 pt (body), 7.5 pt (captions), 6.5 pt
+  (labels); the real fonts loaded.
+- *PDF* (after printing, read back with `pdfjs-dist`): page count and size;
+  every manifest string present on its page (whitespace-insensitive, words
+  unchanged); website-only strings absent; each project on exactly one page;
+  contact links clickable.
+
+**Dependencies added (build-time only):** `playwright` (plus its headless
+Chromium, installed by `npm run pdf:setup` locally and by the workflow in CI)
+and `pdfjs-dist`. `engines.node` raised to 22.13 for `pdfjs-dist`.
+
+**Trade-offs / limits** ⟲
+- Deploys take roughly a minute longer (Chromium download + PDF build).
+- Text can wrap slightly differently on GitHub's Linux runners than on a Mac;
+  the layout is recomputed there and the same checks run, so a difference can
+  fail a deploy but cannot publish a broken PDF.
+- Spreadsheet screenshots with small text (e.g. the Baja hand calculations)
+  stay hard to read on paper even when marked `large`; a tighter crop of the
+  key rows would read better.
+

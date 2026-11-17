@@ -2,6 +2,9 @@
 dist/
 .astro/
 
+# Page previews of the PDF portfolio (npm run pdf)
+pdf-preview/
+
 # Dependencies
 node_modules/
 

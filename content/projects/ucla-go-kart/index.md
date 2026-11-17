@@ -33,6 +33,9 @@ team: "5"
 status: "Successfully ran at end of quarter"
 order: 2
 draft: false
+# PDF portfolio: true = this project gets a page in the downloadable PDF.
+# (Only changes the PDF — the project stays on the website either way.)
+includeInPdf: true
 
 # Which focus areas (ids from content/profile.yaml) this project is evidence for.
 areas: [test, design]
@@ -98,28 +101,37 @@ videoCaption: "Me driving our go-kart around the track (not representative of to
 
 # --- Gallery (CAD, drawings, test photos, diagrams) ----------------------------
 # `section` groups figures into short chapters on the page.
+# `includeInPdf: true` puts that image on this project's PDF page too (2–6 per
+# project reads best). Optional `pdfSize: large` or `small` gives an image more
+# or less room on the PDF page. Neither changes the website.
 gallery:
   - src: ./images/GK_CAD.png
+    includeInPdf: true
     section: "Design"
     alt: "Full CAD assembly of go-kart, including chassis, steering, electronics box, hub motor wheels in rears, and brake handle (seat hidden for clarity)"
     caption: "Full CAD assembly of go-kart, including chassis, steering, electronics box, hub motor wheels in rears, and brake handle (seat hidden for clarity)"
   - src: ./images/GK_Chassis.JPG
+    includeInPdf: true
     section: "Build"
     alt: "Chassis sub-system assembled from 80/20 extrusions and aluminum gussets"
     caption: "Chassis sub-system assembled from 80/20 extrusions and aluminum gussets"
   - src: ./images/GK_Front.png
+    includeInPdf: false
     section: "Build"
     alt: "Front of assembled go-kart chassis with system of extrusions and gussets to create frame and laser cut birch wood to mount components"
     caption: "Front of assembled go-kart chassis with system of extrusions and gussets to create frame and laser cut birch wood to mount components"
   - src: ./images/GK_Wheel.png
+    includeInPdf: false
     section: "Build"
     alt: "Rear hub motor wheel mounting bracket, integrated directly into chassis frame to ensure stiffness"
     caption: "Rear hub motor wheel mounting bracket, integrated directly into chassis frame to ensure stiffness"
   - src: ./images/GK_Steering.png
+    includeInPdf: true
     section: "Build"
     alt: "F-shaped aluminum gusset used to combine 3 distinct gusset connections into 1 part and integrate steering into chassis"
     caption: "F-shaped aluminum gusset used to combine 3 distinct gusset connections into 1 part and integrate steering into chassis"
   - src: ./images/GK_Full.JPG
+    includeInPdf: true
     section: "Build"
     alt: "Fully assembled go-kart with all systems integrated"
     caption: "Fully assembled go-kart with all systems integrated"

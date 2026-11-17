@@ -179,6 +179,66 @@ resume, **using the same file name**. (Or use a different name and update
 month. Visitors always get the newest version — the link includes a fingerprint
 of the file, so browsers can't show a stale cached copy.
 
+### PDF portfolio (the "Download this portfolio" button)
+
+The site also produces a PDF version of this portfolio for applications that
+ask for one: a cover page about you, then **one US Letter page per project**
+with its images, captions, and skills. The two "Download this portfolio"
+buttons on the homepage link to it.
+
+**The PDF has no text of its own.** Your name, school line, location, photo,
+and contact links come from `content/profile.yaml`; the cover paragraph is the
+`lede` in `content/about.md`; each project page shows that project's `title`,
+`role`, `organization`, `timeline`, `summary`, `skills`, `tools`, and the
+captions of the images you choose. Edit those as usual and the PDF follows.
+
+**Choosing what goes in it** — two true/false switches, both in a project's
+`index.md`. Neither changes the website.
+
+| To… | Do this |
+|---|---|
+| Put a project in the PDF | `includeInPdf: true` (near `draft:` at the top) |
+| Leave a project out | `includeInPdf: false` |
+| Put an image on that project's PDF page | `includeInPdf: true` under that image's `src:` line in `gallery:` |
+| Leave an image out | `includeInPdf: false` |
+| Give an image more or less room | add `pdfSize: large` or `pdfSize: small` under it (optional) |
+
+Projects and images appear in the same order as on the website. 2–6 images per
+project read best; up to 8 fit. Every image in the PDF needs a `caption`.
+Tailoring the PDF for a particular company is just flipping these switches and
+rebuilding.
+
+**Making the PDF on your computer**
+
+```bash
+npm run pdf:setup     # once only: downloads the browser that makes the PDF (~100 MB, kept outside this folder)
+npm run pdf           # builds the site + PDF, opens the PDF, and saves page previews
+```
+
+- The PDF is saved to `dist/downloads/Anav-Saxena-Engineering-Design-Portfolio.pdf`
+  (the name comes from `name` in `content/profile.yaml`).
+- Pictures of every page are saved to `pdf-preview/` (`all-pages.jpg` shows them
+  all at once). Neither folder is committed to GitHub.
+- While editing, `npm run dev` then **http://localhost:4321/portfolio-pdf/**
+  shows the pages on screen and refreshes as you save. (The download buttons
+  only work after a build, not in this live preview.)
+
+**It updates itself when you publish.** GitHub rebuilds the PDF from your
+content on every deploy, so the download always matches the live site. You
+never commit the PDF.
+
+**If the build stops**, it tells you which file and field to fix. It refuses to
+make a PDF if a project is missing a required field, an image has no caption or
+didn't load, anything would spill off a page, text would be too small or not
+black, or the finished PDF doesn't match your content word for word. Common
+messages:
+
+- *"…cannot all fit on one page at a readable size"* — set `includeInPdf: false`
+  on an image or two in that project, or mark some `pdfSize: small`.
+- *"…prints at only N dpi and will look soft"* — a warning, not an error: that
+  image file is small. A larger original (same file name) fixes it.
+- *"the browser used to make the PDF is not installed yet"* — run `npm run pdf:setup`.
+
 ### Adding a new project
 
 1. Copy the folder `content/projects/_TEMPLATE` and rename the copy, e.g.
@@ -187,6 +247,8 @@ of the file, so browsers can't show a stale cached copy.
 2. Open its `index.md`, fill in the fields, and change `draft: true` to `draft: false`.
 3. Set `order` to where it should appear.
 4. Add images to its `images/` folder.
+5. To give it a page in the PDF portfolio too, set `includeInPdf: true` on the
+   project and on the images you want there (see the section above).
 
 That's it — the card, page, homepage listing and focus-area links are created
 automatically. To hide a project without deleting it, set `draft: true`; to
@@ -229,8 +291,9 @@ npm run verify
 ```
 
 This runs the same checks as the automatic deploy: it validates every content
-file, builds the full site, and checks every internal link and image. If it
-ends without an error, the site is safe to publish.
+file, builds the full site and the PDF portfolio, and checks every internal
+link and image. If it ends without an error, the site is safe to publish.
+(It needs the one-time `npm run pdf:setup` described under "PDF portfolio".)
 
 ## Publishing changes
 
@@ -261,8 +324,10 @@ build succeeds, so a mistake can never take the site down.
 |---|---|
 | `npm run dev` | Live preview at http://localhost:4321 |
 | `npm run placeholders` | List remaining placeholder text and missing images |
-| `npm run verify` | Full check: content validation, build, broken-link check |
-| `npm run build` | Build the production site into `dist/` |
+| `npm run verify` | Full check: content validation, build (site + PDF), broken-link check |
+| `npm run build` | Build the production site and the PDF portfolio into `dist/` |
+| `npm run pdf` | Build, then open the PDF portfolio and save page previews to `pdf-preview/` |
+| `npm run pdf:setup` | One-time download of the browser used to make the PDF |
 | `npm run preview` | Preview the production build |
 | `npm run test:links:external` | Also check links to other websites (optional, slower) |
 
@@ -276,4 +341,12 @@ build succeeds, so a mistake can never take the site down.
 - **Deploy:** `.github/workflows/deploy.yml` runs `npm run verify` on every
   push and PR, and deploys `main` to GitHub Pages via `withastro/action` and
   `actions/deploy-pages`.
+- **PDF portfolio:** `src/pages/portfolio-pdf.astro` is a print layout built
+  from the content collections (inclusion rules and image sizing in
+  `src/lib/portfolioPdf.ts`; image arrangement in `src/pdf/layout.client.js`,
+  inlined into that page only). `scripts/build-portfolio-pdf.mjs` renders it
+  with Playwright's headless Chromium, validates the page and the finished PDF
+  (`pdfjs-dist`) against a manifest the page emits, then deletes the print
+  page and its PDF-only assets from `dist/`. The published site still ships no
+  JavaScript.
 - Design and architecture rationale: [`docs/DECISIONS.md`](docs/DECISIONS.md).
